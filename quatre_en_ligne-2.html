@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quatre en ligne — HTML Vanilla</title>
+  <style>
+    :root{
+      --bg:#0b1220; /* ardoise sombre */
+      --panel:rgba(255,255,255,.06);
+      --panel-border:rgba(255,255,255,.12);
+      --text:#e5e7eb;
+      --muted:#a7b2c2;
+      --accent:#38bdf8;
+      --red:#ef4444; --red-dark:#b91c1c;
+      --amber:#fbbf24; --amber-dark:#d97706;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:
+      radial-gradient(1200px 600px at 50% -200px, rgba(56,189,248,.12), transparent),
+      var(--bg);
+      color:var(--text);font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    .container{min-height:100svh;display:flex;flex-direction:column;align-items:center;gap:20px;padding:24px}
+    header{width:100%;max-width:1000px;display:flex;gap:12px;row-gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    h1{margin:0;font-size:clamp(20px,3vw,28px);font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+    .dot{width:20px;height:20px;border-radius:999px}
+    .status{font-size:13px;opacity:.9;display:flex;align-items:center;gap:10px}
+    .tag{font-size:10px;padding:2px 8px;border-radius:999px;border:1px solid;color:#a6e3b1;background:rgba(16,185,129,.1)}
+
+    .panel{width:100%;max-width:1000px;background:var(--panel);backdrop-filter: blur(8px);border:1px solid var(--panel-border);border-radius:16px;padding:16px}
+    .grid{display:grid;gap:12px}
+    @media(min-width:768px){.grid{grid-template-columns:repeat(4,1fr)}}
+    label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.12em;opacity:.7;margin-bottom:6px}
+    .btn{cursor:pointer;padding:10px 12px;border-radius:12px;border:1px solid var(--panel-border);background:rgba(255,255,255,.06);color:var(--text);font-size:14px;transition:transform .12s ease, background .2s}
+    .btn:hover{transform:translateY(1px);background:rgba(255,255,255,.1)}
+    .btn[disabled]{opacity:.4;cursor:not-allowed}
+    .btn.sel{background:rgba(255,255,255,.12)}
+    select{width:100%;appearance:none;background:rgba(255,255,255,.06);border:1px solid var(--panel-border);border-radius:12px;padding:10px 12px;color:var(--text)}
+
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+    .score-pill{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--panel-border);background:rgba(255,255,255,.05);font-size:13px}
+    .score-pill .tiny{width:8px;height:8px;border-radius:999px}
+
+    .board-wrap{position:relative;width:min(92vw,760px);max-width:760px;aspect-ratio:7/6;margin-inline:auto}
+    @media(max-width:480px){
+      .board-wrap{width:min(96vw,360px);max-width:360px}
+      .cells{padding:8px}
+      .cell{margin:4px}
+    }
+    .wood{position:absolute;inset:0;border-radius:28px;background:#7a5230;box-shadow:0 30px 80px rgba(0,0,0,.35), inset 0 0 0 10px rgba(0,0,0,.18), inset 0 0 40px rgba(0,0,0,.30)}
+    .wood::after{content:"";position:absolute;inset:0;border-radius:28px;background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(0,0,0,.25))}
+
+    .cells{position:absolute;inset:0;z-index:10;display:grid;padding:12px;grid-template-columns:repeat(7,1fr);grid-template-rows:repeat(6,1fr)}
+    .cell{position:relative;margin:6px;border-radius:999px;background:rgba(2,6,23,.85);box-shadow: inset 0 6px 10px rgba(255,255,255,.10), inset 0 -18px 26px rgba(0,0,0,.65), 0 6px 12px rgba(0,0,0,.35);cursor:pointer}
+
+    /* Jetons */
+    .token{position:absolute;inset:0;border-radius:999px;box-shadow: inset 0 1px 2px rgba(255,255,255,.25), inset 0 -6px 10px rgba(0,0,0,.35), 0 8px 16px rgba(0,0,0,.45);opacity:1;will-change:transform;backface-visibility:hidden;transform:translateY(0) translateZ(0)}
+    .token.red{background:linear-gradient(145deg, var(--red) 0%, var(--red-dark) 100%)}
+    .token.yellow{background:linear-gradient(145deg, var(--amber) 0%, var(--amber-dark) 100%)}
+    .token.highlight{outline:4px solid rgba(255,255,255,.7)}
+    /* Simple: seul le nouveau jeton tombe, sans fade ni bounce */
+    .token.new{transform: translateY(calc(-1 * var(--drop, 500%))); animation: dropNew var(--dur,.35s) linear forwards;}
+    @keyframes dropNew{from{transform: translateY(calc(-1 * var(--drop, 500%)))} to{transform: translateY(0)}}
+
+    .ghost{position:absolute;inset:0;border-radius:999px;box-shadow: inset 0 0 0 4px var(--ghost-ring);opacity:.7}
+
+    /* Overlay fin de partie */
+    .overlay{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,.6);backdrop-filter: blur(6px);animation:fade .2s ease both}
+    .modal{background:rgba(15,23,42,.9);border:1px solid #334155;border-radius:16px;padding:18px 20px;box-shadow:0 20px 60px rgba(0,0,0,.5);text-align:center}
+    .modal h2{margin:0 0 10px;font-size:22px}
+    @keyframes fade{from{opacity:0}to{opacity:1}}
+
+    .hint{max-width:1000px;text-align:center;font-size:13px;opacity:.85;line-height:1.5}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span class="dot" style="background:#ef4444"></span>Quatre en ligne<span class="dot" style="background:#fbbf24"></span></h1>
+      <div class="status">
+        <span id="selfcheck" class="tag" title="Auto-tests basiques">Self‑check…</span>
+        <span id="statusText">Prêt.</span>
+      </div>
+    </header>
+
+    <div class="panel">
+      <div class="grid">
+        <div>
+          <label>Mode</label>
+          <div class="row">
+            <button id="m1" class="btn">1 joueur</button>
+            <button id="m2" class="btn">2 joueurs</button>
+          </div>
+        </div>
+        <div>
+          <label>Difficulté IA</label>
+          <select id="difficulty"></select>
+        </div>
+        <div>
+          <label>Joueur qui commence</label>
+          <div class="row">
+            <button id="startR" class="btn">Rouge</button>
+            <button id="startY" class="btn">Jaune</button>
+          </div>
+        </div>
+        <div id="aiColorWrap">
+          <label>Couleur de l'IA</label>
+          <div class="row">
+            <button id="aiR" class="btn">IA Rouge</button>
+            <button id="aiY" class="btn">IA Jaune</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="width:100%;max-width:1000px;justify-content:space-between">
+      <div class="row">
+        <div class="score-pill" title="Rouge">
+          <span class="tiny" style="background:var(--red)"></span>
+          <span>Rouge</span><b id="scoreR">0</b>
+        </div>
+        <div class="score-pill" title="Nuls">
+          <span class="tiny" style="background:#cbd5e1"></span>
+          <span>Nuls</span><b id="scoreD">0</b>
+        </div>
+        <div class="score-pill" title="Jaune">
+          <span class="tiny" style="background:var(--amber)"></span>
+          <span>Jaune</span><b id="scoreY">0</b>
+        </div>
+      </div>
+      <div class="row">
+        <div class="score-pill" title="Tour courant"><span class="tiny" id="turnDot"></span><span>Tour: <b id="turnText">—</b></span></div>
+        <button id="undo1" class="btn" title="Annuler coup">↩️ Annuler coup</button>
+        <button id="undo2" class="btn" title="Annuler tour">🔁 Annuler tour</button>
+        <button id="newGame" class="btn" title="Nouvelle partie">Nouvelle partie</button>
+        <button id="reset" class="btn" title="Réinitialiser scores">🏆 Réinitialiser scores</button>
+      </div>
+    </div>
+
+    <div class="board-wrap">
+      <div class="wood"></div>
+      <div id="cells" class="cells"></div>
+      <div id="overlay" class="overlay" style="display:none">
+        <div class="modal">
+          <h2 id="overlayTitle">—</h2>
+          <div class="row" style="justify-content:center">
+            <button id="replay" class="btn">Rejouer</button>
+            <button id="swapStarter" class="btn">Changer qui commence</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hint">
+      Clique sur une colonne pour lâcher un jeton. Le centre est puissant ! Choisis la difficulté, la couleur de l'IA et qui commence.<br>
+      <b>Conseil :</b> en Expert, l'IA calcule en profondeur 7 (ça peut prendre ~1 seconde).
+    </div>
+  </div>
+
+<script>
+(() => {
+  // —— Constantes ——
+  const ROWS = 6, COLS = 7;
+  const RED = 'R', YELLOW = 'Y', EMPTY = null;
+  const DIFFICULTY_PRESETS = [
+    { key:'easy', label:'Débutant', depth:2 },
+    { key:'medium', label:'Intermédiaire', depth:4 },
+    { key:'hard', label:'Avancé', depth:6 },
+    { key:'expert', label:'Expert', depth:7 },
+  ];
+  const ORDERED_COLS = [3,4,2,5,1,6,0];
+  const ENABLE_SELF_TESTS = true;
+
+  // —— État ——
+  let board = createEmptyBoard();
+  let turn = RED;
+  let winningLine = [];
+  let winner = null; // 'R' | 'Y' | 'DRAW' | null
+  let hoverCol = null;
+  let difficulty = loadLS('cf_difficulty', DIFFICULTY_PRESETS[1]);
+  let mode = loadLS('cf_mode', '1J');
+  let aiColor = loadLS('cf_ai_color', YELLOW);
+  let scores = loadLS('cf_scores', { R:0, Y:0, D:0 });
+  let isThinking = false;
+  let history = []; // {col,row,player}
+  let lastMove = null;
+
+  // —— Helpers LS ——
+  function loadLS(k, def){ try{ const v = localStorage.getItem(k); return v? JSON.parse(v): def }catch{ return def } }
+  function saveLS(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)) }catch{} }
+
+  // —— DOM refs ——
+  const $cells = document.getElementById('cells');
+  const $status = document.getElementById('statusText');
+  const $turnText = document.getElementById('turnText');
+  const $turnDot = document.getElementById('turnDot');
+  const $scoreR = document.getElementById('scoreR');
+  const $scoreY = document.getElementById('scoreY');
+  const $scoreD = document.getElementById('scoreD');
+  const $overlay = document.getElementById('overlay');
+  const $overlayTitle = document.getElementById('overlayTitle');
+  const $selfcheck = document.getElementById('selfcheck');
+
+  // Controls
+  const $m1 = document.getElementById('m1');
+  const $m2 = document.getElementById('m2');
+  const $difficulty = document.getElementById('difficulty');
+  const $startR = document.getElementById('startR');
+  const $startY = document.getElementById('startY');
+  const $aiWrap = document.getElementById('aiColorWrap');
+  const $aiR = document.getElementById('aiR');
+  const $aiY = document.getElementById('aiY');
+  const $undo1 = document.getElementById('undo1');
+  const $undo2 = document.getElementById('undo2');
+  const $newGame = document.getElementById('newGame');
+  const $reset = document.getElementById('reset');
+  const $replay = document.getElementById('replay');
+  const $swapStarter = document.getElementById('swapStarter');
+
+  // —— UI init ——
+  DIFFICULTY_PRESETS.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.key; opt.textContent = p.label;
+    if (p.key === difficulty.key) opt.selected = true;
+    $difficulty.appendChild(opt);
+  });
+
+  // —— Board init (cells) ——
+  function buildCells(){
+    $cells.innerHTML = '';
+    for(let r=0;r<ROWS;r++){
+      for(let c=0;c<COLS;c++){
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.r = r; cell.dataset.c = c;
+        cell.addEventListener('mouseenter', () => { hoverCol = c; renderGhost(); });
+        cell.addEventListener('mouseleave', () => { hoverCol = null; renderGhost(); });
+        cell.addEventListener('click', () => onColumnClick(c));
+        $cells.appendChild(cell);
+      }
+    }
+  }
+
+  // —— Core logic ——
+  function createEmptyBoard(){ return Array.from({length:ROWS}, () => Array(COLS).fill(EMPTY)); }
+  function cloneBoard(b){ return b.map(row => row.slice()); }
+  function getValidRow(b, col){ for(let r=ROWS-1;r>=0;r--) if(b[r][col]===EMPTY) return r; return null }
+  function getValidColumns(b){ const cols=[]; for(let c=0;c<COLS;c++) if(b[0][c]===EMPTY) cols.push(c); return cols }
+  function dropPiece(b, col, player){ const row=getValidRow(b,col); if(row===null) return null; const next=cloneBoard(b); next[row][col]=player; return { board: next, row } }
+  function checkWinner(b){
+    // horiz
+    for(let r=0;r<ROWS;r++) for(let c=0;c<COLS-3;c++){
+      const x=b[r][c]; if(x && b[r][c+1]===x && b[r][c+2]===x && b[r][c+3]===x) return { winner:x, line:[[r,c],[r,c+1],[r,c+2],[r,c+3]] } }
+    // vert
+    for(let c=0;c<COLS;c++) for(let r=0;r<ROWS-3;r++){
+      const x=b[r][c]; if(x && b[r+1][c]===x && b[r+2][c]===x && b[r+3][c]===x) return { winner:x, line:[[r,c],[r+1,c],[r+2,c],[r+3,c]] } }
+    // diag \
+    for(let r=0;r<ROWS-3;r++) for(let c=0;c<COLS-3;c++){
+      const x=b[r][c]; if(x && b[r+1][c+1]===x && b[r+2][c+2]===x && b[r+3][c+3]===x) return { winner:x, line:[[r,c],[r+1,c+1],[r+2,c+2],[r+3,c+3]] } }
+    // diag /
+    for(let r=0;r<ROWS-3;r++) for(let c=3;c<COLS;c++){
+      const x=b[r][c]; if(x && b[r+1][c-1]===x && b[r+2][c-2]===x && b[r+3][c-3]===x) return { winner:x, line:[[r,c],[r+1,c-1],[r+2,c-2],[r+3,c-3]] } }
+    return null;
+  }
+  function isDraw(b){ return getValidColumns(b).length===0 && !checkWinner(b); }
+
+  // —— Heuristique ——
+  function evaluateWindow(win, ai, opp){
+    const aiCount = win.filter(x=>x===ai).length;
+    const oppCount = win.filter(x=>x===opp).length;
+    const emptyCount = win.filter(x=>x===EMPTY).length;
+    let score=0;
+    if(aiCount===4) score += 100000;
+    else if(aiCount===3 && emptyCount===1) score += 120;
+    else if(aiCount===2 && emptyCount===2) score += 15;
+    if(oppCount===3 && emptyCount===1) score -= 140;
+    else if(oppCount===2 && emptyCount===2) score -= 12;
+    return score;
+  }
+  function scorePosition(b, ai){
+    const opp = ai===RED ? YELLOW : RED; let score=0;
+    const centerCol = Math.floor(COLS/2); let centerCount=0; for(let r=0;r<ROWS;r++) if(b[r][centerCol]===ai) centerCount++; score += centerCount*6;
+    for(let r=0;r<ROWS;r++) for(let c=0;c<COLS-3;c++) score += evaluateWindow([b[r][c],b[r][c+1],b[r][c+2],b[r][c+3]], ai, opp);
+    for(let c=0;c<COLS;c++) for(let r=0;r<ROWS-3;r++) score += evaluateWindow([b[r][c],b[r+1][c],b[r+2][c],b[r+3][c]], ai, opp);
+    for(let r=0;r<ROWS-3;r++) for(let c=0;c<COLS-3;c++) score += evaluateWindow([b[r][c],b[r+1][c+1],b[r+2][c+2],b[r+3][c+3]], ai, opp);
+    for(let r=0;r<ROWS-3;r++) for(let c=3;c<COLS;c++) score += evaluateWindow([b[r][c],b[r+1][c-1],b[r+2][c-2],b[r+3][c-3]], ai, opp);
+    return score;
+  }
+  function minimax(b, depth, alpha, beta, maximizing, ai, currentTurn){
+    const validCols = getValidColumns(b);
+    const winInfo = checkWinner(b);
+    if(winInfo){ return { score: winInfo.winner===ai ? 10000000+depth : -10000000-depth, col:null } }
+    if(depth===0 || validCols.length===0){ return { score: scorePosition(b, ai), col:null } }
+    let bestCol = ORDERED_COLS.find(c=>validCols.includes(c)); if(bestCol==null) bestCol = validCols[0];
+    if(maximizing){
+      let value = -Infinity;
+      for(const c of ORDERED_COLS){ if(!validCols.includes(c)) continue; const dropped = dropPiece(b,c,currentTurn); if(!dropped) continue; const res = minimax(dropped.board, depth-1, alpha, beta, false, ai, ai===RED?YELLOW:RED); if(res.score>value){ value=res.score; bestCol=c } alpha=Math.max(alpha,value); if(alpha>=beta) break }
+      return { score:value, col:bestCol };
+    }else{
+      let value = Infinity;
+      for(const c of ORDERED_COLS){ if(!validCols.includes(c)) continue; const dropped = dropPiece(b,c,currentTurn); if(!dropped) continue; const res = minimax(dropped.board, depth-1, alpha, beta, true, ai, ai); if(res.score<value){ value=res.score; bestCol=c } beta=Math.min(beta,value); if(alpha>=beta) break }
+      return { score:value, col:bestCol };
+    }
+  }
+  function bestMoveWithDifficulty(b, ai, depth){
+    const validCols = getValidColumns(b); if(validCols.length===0) return null;
+    if(depth<=2){ if(Math.random()<.25) return validCols[Math.floor(Math.random()*validCols.length)] }
+    else if(depth===4){ if(Math.random()<.10) return validCols[Math.floor(Math.random()*validCols.length)] }
+    const result = minimax(b, depth, -Infinity, Infinity, true, ai, ai); return result.col ?? validCols[0];
+  }
+
+  // —— UI rendering ——
+  function renderAll(){
+    // mode buttons
+    $m1.classList.toggle('sel', mode==='1J');
+    $m2.classList.toggle('sel', mode==='2J');
+    $difficulty.disabled = mode!=='1J';
+    $aiWrap.style.display = mode==='1J' ? 'block' : 'none';
+    $aiR.classList.toggle('sel', aiColor===RED);
+    $aiY.classList.toggle('sel', aiColor===YELLOW);
+    // starter
+    $startR.classList.toggle('sel', turn===RED && !winner);
+    $startY.classList.toggle('sel', turn===YELLOW && !winner);
+    // status
+    const humanColor = mode==='1J' ? (aiColor===RED?YELLOW:RED) : null;
+    let txt = '';
+    if(winner==='DRAW') txt = 'Match nul. Rejouez !';
+    else if(winner===RED) txt = 'Rouge gagne !';
+    else if(winner===YELLOW) txt = 'Jaune gagne !';
+    else if(mode==='1J') txt = (turn===humanColor ? "À toi de jouer (humain)." : "L'IA réfléchit…");
+    else txt = (turn===RED ? 'Tour des Rouges.' : 'Tour des Jaunes.');
+    $status.textContent = txt;
+    // turn pill
+    $turnText.textContent = turn===RED ? 'Rouge' : 'Jaune';
+    $turnDot.style.background = turn===RED ? 'var(--red)' : 'var(--amber)';
+    // scores
+    $scoreR.textContent = scores.R|0; $scoreY.textContent = scores.Y|0; $scoreD.textContent = scores.D|0;
+
+    // board
+    renderBoard();
+    renderGhost();
+
+    // overlay
+    if(winner){ $overlay.style.display='flex'; $overlayTitle.textContent = winner==='DRAW' ? 'Match nul 🤝' : (winner===RED?'Rouge gagne !':'Jaune gagne !'); }
+    else { $overlay.style.display='none' }
+
+    // buttons disabled
+    const canUndo = history.length>0 && !winner;
+    $undo1.disabled = !canUndo; $undo2.disabled = !canUndo;
+  }
+
+  function renderBoard(){
+    let usedNew = false;
+    for(let r=0;r<ROWS;r++){
+      for(let c=0;c<COLS;c++){
+        const piece = board[r][c];
+        const cell = cellAt(r,c);
+        let tok = cell.querySelector('.token');
+        if(piece){
+          const colorClass = (piece===RED?'red':'yellow');
+          if(!tok){
+            tok = document.createElement('div');
+            tok.className = 'token ' + colorClass;
+            // Anime uniquement le jeton fraîchement placé
+            if(lastMove && lastMove.r===r && lastMove.c===c){
+              tok.classList.add('new');
+              tok.style.setProperty('--drop', `${(ROWS - r) * 100}%`);
+              const dist = (ROWS - r);
+              const dur = Math.min(0.75, 0.28 + dist*0.07);
+              tok.style.setProperty('--dur', `${dur}s`);
+              tok.addEventListener('animationend', () => { tok.classList.remove('new'); tok.style.removeProperty('--dur'); }, { once:true });
+              usedNew = true;
+            }
+            cell.appendChild(tok);
+          } else {
+            tok.classList.toggle('red', piece===RED);
+            tok.classList.toggle('yellow', piece===YELLOW);
+          }
+          const isWinCell = winningLine.some(([wr,wc]) => wr===r && wc===c);
+          tok.classList.toggle('highlight', isWinCell);
+        } else {
+          if(tok) tok.remove();
+        }
+      }
+    }
+    if(usedNew){ lastMove = null; }
+  }
+
+  function renderGhost(){
+    // clear existing ghosts
+    document.querySelectorAll('.ghost').forEach(el=>el.remove());
+    if(hoverCol==null || winner) return;
+    const canPlay = !winner && (!isThinking || (mode==='2J'));
+    if(!canPlay) return;
+    const r = getValidRow(board, hoverCol); if(r==null) return;
+    if(board[r][hoverCol]!==EMPTY) return;
+    const cell = cellAt(r, hoverCol);
+    const ghost = document.createElement('div');
+    ghost.className = 'ghost';
+    ghost.style.setProperty('--ghost-ring', turn===RED ? 'rgba(239,68,68,.55)' : 'rgba(251,191,36,.55)');
+    cell.appendChild(ghost);
+  }
+
+  function cellAt(r,c){ return $cells.children[r*COLS + c] }
+
+  // —— Actions ——
+  function onColumnClick(col){
+    const canPlay = !winner && (!isThinking || (mode==='2J'));
+    if(!canPlay) return;
+    if(mode==='1J' && turn===aiColor) return; // block clicking during AI turn
+    const dropped = dropPiece(board, col, turn); if(!dropped) return;
+    // appliquer le coup humain
+    board = dropped.board;
+    history.push({ col, row:dropped.row, player: turn });
+    lastMove = { r: dropped.row, c: col };
+    const info = checkWinner(board), draw=isDraw(board);
+    if(info){ winningLine=info.line; winner=info.winner; scores[info.winner]=(scores[info.winner]||0)+1; saveLS('cf_scores',scores) }
+    else if(draw){ winner='DRAW'; scores.D=(scores.D||0)+1; saveLS('cf_scores',scores) }
+    else { turn = (turn===RED?YELLOW:RED) }
+    winningLine = info? info.line : [];
+    renderAll();
+    if(!winner && mode==='1J' && turn===aiColor){ thinkAndMoveAI(); }
+  }
+
+  function thinkAndMoveAI(){
+    isThinking = true; renderAll();
+    setTimeout(() => {
+      const col = bestMoveWithDifficulty(board, aiColor, DIFFICULTY_PRESETS.find(p=>p.key===difficulty.key)?.depth || difficulty.depth || 4);
+      if(col==null){ isThinking=false; renderAll(); return }
+      const dropped = dropPiece(board, col, aiColor);
+      if(!dropped){ isThinking=false; renderAll(); return }
+      // appliquer le coup IA
+      board = dropped.board;
+      history.push({ col, row:dropped.row, player: aiColor });
+      lastMove = { r: dropped.row, c: col };
+      const info = checkWinner(board), draw=isDraw(board);
+      if(info){ winningLine=info.line; winner=info.winner; scores[info.winner]=(scores[info.winner]||0)+1; saveLS('cf_scores',scores) }
+      else if(draw){ winner='DRAW'; scores.D=(scores.D||0)+1; saveLS('cf_scores',scores) }
+      else { turn = (aiColor===RED?YELLOW:RED) }
+      isThinking=false; renderAll();
+    }, 350);
+  }
+
+  function newGame(flipStarter=false){
+    board = createEmptyBoard(); winningLine=[]; winner=null; history=[]; isThinking=false;
+    if(flipStarter) turn = (turn===RED?YELLOW:RED);
+    renderAll();
+    if(!winner && mode==='1J' && turn===aiColor){ thinkAndMoveAI(); }
+  }
+  function resetMatch(){ newGame(false); scores={R:0,Y:0,D:0}; saveLS('cf_scores',scores); renderAll(); }
+  function undoMove(){ if(history.length===0 || winner) return; const last=history.pop(); const b=cloneBoard(board); b[last.row][last.col]=EMPTY; board=b; turn=last.player; winningLine=[]; winner=null; renderAll(); }
+  function undoFullTurn(){ if(history.length===0 || winner) return; let steps = (mode==='1J'?2:1); let b=cloneBoard(board); while(steps>0 && history.length>0){ const last=history.pop(); b[last.row][last.col]=EMPTY; steps--; } board=b; winningLine=[]; winner=null; const total=history.length; turn = (total%2===0?RED:YELLOW); renderAll(); }
+
+  // —— Event wiring ——
+  $m1.onclick = () => { mode='1J'; saveLS('cf_mode',mode); newGame(false) }
+  $m2.onclick = () => { mode='2J'; saveLS('cf_mode',mode); newGame(false) }
+  $difficulty.onchange = () => { const preset = DIFFICULTY_PRESETS.find(p=>p.key===$difficulty.value)||DIFFICULTY_PRESETS[1]; difficulty=preset; saveLS('cf_difficulty',difficulty); }
+  $startR.onclick = () => { turn=RED; if(mode==='1J') aiColor=YELLOW; saveLS('cf_ai_color',aiColor); newGame(false) }
+  $startY.onclick = () => { turn=YELLOW; if(mode==='1J') aiColor=RED; saveLS('cf_ai_color',aiColor); newGame(false) }
+  $aiR.onclick = () => { aiColor=RED; turn=YELLOW; saveLS('cf_ai_color',aiColor); newGame(false) }
+  $aiY.onclick = () => { aiColor=YELLOW; turn=RED; saveLS('cf_ai_color',aiColor); newGame(false) }
+  $undo1.onclick = () => undoMove();
+  $undo2.onclick = () => undoFullTurn();
+  $newGame.onclick = () => newGame(false);
+  $reset.onclick = () => resetMatch();
+  $replay.onclick = () => newGame(false);
+  $swapStarter.onclick = () => newGame(true);
+
+  // —— Self tests ——
+  function runSelfTests(){
+    if(!ENABLE_SELF_TESTS) return { passed:true, details:[] };
+    const errors=[]; const assert=(cond,msg)=>{ if(!cond) errors.push(msg) };
+    // A/B: plateau vide
+    let b=createEmptyBoard();
+    assert(checkWinner(b)===null, 'A: winner plateau vide => null');
+    assert(isDraw(b)===false, 'B: draw plateau vide => false');
+    // C/D/E/F: lignes gagnantes
+    b=createEmptyBoard(); b[5][0]=RED;b[5][1]=RED;b[5][2]=RED;b[5][3]=RED; let w=checkWinner(b); assert(w && w.winner===RED, 'C: horizontal RED');
+    b=createEmptyBoard(); b[5][0]=YELLOW;b[4][0]=YELLOW;b[3][0]=YELLOW;b[2][0]=YELLOW; w=checkWinner(b); assert(w && w.winner===YELLOW, 'D: vertical YELLOW');
+    b=createEmptyBoard(); b[2][0]=RED;b[3][1]=RED;b[4][2]=RED;b[5][3]=RED; w=checkWinner(b); assert(w && w.winner===RED, 'E: diag \\\ RED');
+    b=createEmptyBoard(); b[5][0]=YELLOW;b[4][1]=YELLOW;b[3][2]=YELLOW;b[2][3]=YELLOW; w=checkWinner(b); assert(w && w.winner===YELLOW, 'F: diag / YELLOW');
+    // G: dropPiece ligne correcte
+    b=createEmptyBoard(); const d=dropPiece(b,0,RED); assert(d && d.row===5, 'G: dropPiece ligne 5');
+    // H: colonne pleine => getValidRow null
+    b=createEmptyBoard(); for(let r=0;r<6;r++){ b[r][0]=RED } assert(getValidRow(b,0)===null, 'H: colonne pleine renvoie null');
+    // I: bestMove gagne immédiatement (AI = RED)
+    b=createEmptyBoard(); b[5][0]=RED;b[5][1]=RED;b[5][2]=RED; assert(bestMoveWithDifficulty(b, RED, 2)===3, 'I: coup gagnant trouvé en col 3');
+    // J: bestMove bloque une menace (AI = RED)
+    b=createEmptyBoard(); b[5][0]=YELLOW;b[5][1]=YELLOW;b[5][2]=YELLOW; assert(bestMoveWithDifficulty(b, RED, 2)===3, 'J: blocage en col 3');
+
+    return { passed: errors.length===0, details: errors };
+  }
+
+  // —— Boot ——
+  (function boot(){
+    buildCells();
+    const res = runSelfTests();
+    $selfcheck.textContent = res.passed ? 'Self‑check OK' : `Tests à corriger (${res.details.length})`;
+    $selfcheck.style.color = res.passed ? '#86efac' : '#fbbf24';
+    if(!res.passed){ console.warn('[Self-tests]', res.details); }
+    renderAll();
+    if(!winner && mode==='1J' && turn===aiColor){ thinkAndMoveAI(); }
+  })();
+})();
+</script>
+</body>
+</html>
