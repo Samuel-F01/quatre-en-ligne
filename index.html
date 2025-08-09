@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quatre en ligne — HTML Vanilla</title>
+  <title id="pageTitle">Quatre en ligne — HTML Vanilla</title>
   <style>
     :root{
       --bg:#0b1220; /* ardoise sombre */
@@ -73,43 +73,46 @@
     @keyframes fade{from{opacity:0}to{opacity:1}}
 
     .hint{max-width:1000px;text-align:center;font-size:13px;opacity:.85;line-height:1.5}
+    /* small language button */
+    #langBtn{min-width:56px;text-transform:uppercase;font-weight:700}
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1><span class="dot" style="background:#ef4444"></span>Quatre en ligne<span class="dot" style="background:#fbbf24"></span></h1>
-      <div class="status">
-        <span id="selfcheck" class="tag" title="Auto-tests basiques">Self‑check…</span>
+      <h1><span class="dot" style="background:#ef4444"></span><span id="appTitle">Quatre en ligne</span><span class="dot" style="background:#fbbf24"></span></h1>
+      <div class="status" style="gap:8px">
+        <span id="selfcheck" class="tag" title="Auto-tests basiques">Self-check…</span>
         <span id="statusText">Prêt.</span>
+        <button id="langBtn" class="btn" title="Change language">FR</button>
       </div>
     </header>
 
     <div class="panel">
       <div class="grid">
         <div>
-          <label>Mode</label>
+          <label data-i18n="modeLabel">Mode</label>
           <div class="row">
-            <button id="m1" class="btn">1 joueur</button>
-            <button id="m2" class="btn">2 joueurs</button>
+            <button id="m1" class="btn" data-i18n="onePlayer">1 joueur</button>
+            <button id="m2" class="btn" data-i18n="twoPlayers">2 joueurs</button>
           </div>
         </div>
         <div>
-          <label>Difficulté IA</label>
+          <label data-i18n="difficultyLabel">Difficulté IA</label>
           <select id="difficulty"></select>
         </div>
         <div>
-          <label>Joueur qui commence</label>
+          <label data-i18n="starterLabel">Joueur qui commence</label>
           <div class="row">
-            <button id="startR" class="btn">Rouge</button>
-            <button id="startY" class="btn">Jaune</button>
+            <button id="startR" class="btn" data-i18n="red">Rouge</button>
+            <button id="startY" class="btn" data-i18n="yellow">Jaune</button>
           </div>
         </div>
         <div id="aiColorWrap">
-          <label>Couleur de l'IA</label>
+          <label data-i18n="aiColorLabel">Couleur de l'IA</label>
           <div class="row">
-            <button id="aiR" class="btn">IA Rouge</button>
-            <button id="aiY" class="btn">IA Jaune</button>
+            <button id="aiR" class="btn" data-i18n="aiRed">IA Rouge</button>
+            <button id="aiY" class="btn" data-i18n="aiYellow">IA Jaune</button>
           </div>
         </div>
       </div>
@@ -119,23 +122,23 @@
       <div class="row">
         <div class="score-pill" title="Rouge">
           <span class="tiny" style="background:var(--red)"></span>
-          <span>Rouge</span><b id="scoreR">0</b>
+          <span data-i18n="labelRed">Rouge</span><b id="scoreR">0</b>
         </div>
         <div class="score-pill" title="Nuls">
           <span class="tiny" style="background:#cbd5e1"></span>
-          <span>Nuls</span><b id="scoreD">0</b>
+          <span data-i18n="labelDraw">Nuls</span><b id="scoreD">0</b>
         </div>
         <div class="score-pill" title="Jaune">
           <span class="tiny" style="background:var(--amber)"></span>
-          <span>Jaune</span><b id="scoreY">0</b>
+          <span data-i18n="labelYellow">Jaune</span><b id="scoreY">0</b>
         </div>
       </div>
       <div class="row">
-        <div class="score-pill" title="Tour courant"><span class="tiny" id="turnDot"></span><span>Tour: <b id="turnText">—</b></span></div>
-        <button id="undo1" class="btn" title="Annuler coup">↩️ Annuler coup</button>
-        <button id="undo2" class="btn" title="Annuler tour">🔁 Annuler tour</button>
-        <button id="newGame" class="btn" title="Nouvelle partie">Nouvelle partie</button>
-        <button id="reset" class="btn" title="Réinitialiser scores">🏆 Réinitialiser scores</button>
+        <div class="score-pill" title="Tour courant"><span class="tiny" id="turnDot"></span><span data-i18n="turnLabel">Tour: <b id="turnText">—</b></span></div>
+        <button id="undo1" class="btn" title="" data-i18n-title="undoOne">↩️ Annuler coup</button>
+        <button id="undo2" class="btn" title="" data-i18n-title="undoTurn">🔁 Annuler tour</button>
+        <button id="newGame" class="btn" title="" data-i18n-title="newGameBtn">Nouvelle partie</button>
+        <button id="reset" class="btn" title="" data-i18n-title="resetBtn">🏆 Réinitialiser scores</button>
       </div>
     </div>
 
@@ -146,14 +149,14 @@
         <div class="modal">
           <h2 id="overlayTitle">—</h2>
           <div class="row" style="justify-content:center">
-            <button id="replay" class="btn">Rejouer</button>
-            <button id="swapStarter" class="btn">Changer qui commence</button>
+            <button id="replay" class="btn" data-i18n="replay">Rejouer</button>
+            <button id="swapStarter" class="btn" data-i18n="swapStarter">Changer qui commence</button>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="hint">
+    <div class="hint" id="hintText">
       Clique sur une colonne pour lâcher un jeton. Le centre est puissant ! Choisis la difficulté, la couleur de l'IA et qui commence.<br>
       <b>Conseil :</b> en Expert, l'IA calcule en profondeur 7 (ça peut prendre ~1 seconde).
     </div>
@@ -161,14 +164,102 @@
 
 <script>
 (() => {
+  // —— I18N strings ——
+  const I18N = {
+    fr: {
+      pageTitle: "Quatre en ligne — HTML Vanilla",
+      appTitle: "Quatre en ligne",
+      modeLabel: "Mode",
+      onePlayer: "1 joueur",
+      twoPlayers: "2 joueurs",
+      difficultyLabel: "Difficulté IA",
+      difficulty_easy: "Débutant",
+      difficulty_medium: "Intermédiaire",
+      difficulty_hard: "Avancé",
+      difficulty_expert: "Expert",
+      starterLabel: "Joueur qui commence",
+      red: "Rouge",
+      yellow: "Jaune",
+      aiColorLabel: "Couleur de l'IA",
+      aiRed: "IA Rouge",
+      aiYellow: "IA Jaune",
+      labelRed: "Rouge",
+      labelYellow: "Jaune",
+      labelDraw: "Nuls",
+      turnLabel: "Tour:",
+      undoOne: "Annuler coup",
+      undoTurn: "Annuler tour",
+      newGameBtn: "Nouvelle partie",
+      resetBtn: "Réinitialiser scores",
+      replay: "Rejouer",
+      swapStarter: "Changer qui commence",
+      hint: "Clique sur une colonne pour lâcher un jeton. Le centre est puissant ! Choisis la difficulté, la couleur de l'IA et qui commence.<br><b>Conseil :</b> en Expert, l'IA calcule en profondeur 7 (ça peut prendre ~1 seconde).",
+      selfcheck_ok: "Self-check OK",
+      selfcheck_fail: "Tests à corriger ({n})",
+      status_draw: "Match nul. Rejouez !",
+      status_red_win: "Rouge gagne !",
+      status_yellow_win: "Jaune gagne !",
+      status_human_turn: "À toi de jouer (humain).",
+      status_ai_thinking: "L'IA réfléchit…",
+      status_red_turn: "Tour des Rouges.",
+      status_yellow_turn: "Tour des Jaunes.",
+      overlay_draw: "Match nul 🤝",
+      overlay_red_win: "Rouge gagne !",
+      overlay_yellow_win: "Jaune gagne !",
+      langBtn: "FR"
+    },
+    en: {
+      pageTitle: "Connect Four — HTML Vanilla",
+      appTitle: "Connect Four",
+      modeLabel: "Mode",
+      onePlayer: "1 player",
+      twoPlayers: "2 players",
+      difficultyLabel: "AI difficulty",
+      difficulty_easy: "Beginner",
+      difficulty_medium: "Intermediate",
+      difficulty_hard: "Advanced",
+      difficulty_expert: "Expert",
+      starterLabel: "Starting player",
+      red: "Red",
+      yellow: "Yellow",
+      aiColorLabel: "AI color",
+      aiRed: "AI Red",
+      aiYellow: "AI Yellow",
+      labelRed: "Red",
+      labelYellow: "Yellow",
+      labelDraw: "Draws",
+      turnLabel: "Turn:",
+      undoOne: "Undo move",
+      undoTurn: "Undo turn",
+      newGameBtn: "New game",
+      resetBtn: "Reset scores",
+      replay: "Replay",
+      swapStarter: "Swap starter",
+      hint: "Click a column to drop a disc. Center is powerful! Pick difficulty, AI color and who starts.<br><b>Tip:</b> on Expert the AI searches to depth 7 (may take ~1 second).",
+      selfcheck_ok: "Self-check OK",
+      selfcheck_fail: "Tests to fix ({n})",
+      status_draw: "Draw. Play again!",
+      status_red_win: "Red wins!",
+      status_yellow_win: "Yellow wins!",
+      status_human_turn: "Your turn (human).",
+      status_ai_thinking: "AI is thinking…",
+      status_red_turn: "Red to move.",
+      status_yellow_turn: "Yellow to move.",
+      overlay_draw: "Draw 🤝",
+      overlay_red_win: "Red wins!",
+      overlay_yellow_win: "Yellow wins!",
+      langBtn: "EN"
+    }
+  };
+
   // —— Constantes ——
   const ROWS = 6, COLS = 7;
   const RED = 'R', YELLOW = 'Y', EMPTY = null;
   const DIFFICULTY_PRESETS = [
-    { key:'easy', label:'Débutant', depth:2 },
-    { key:'medium', label:'Intermédiaire', depth:4 },
-    { key:'hard', label:'Avancé', depth:6 },
-    { key:'expert', label:'Expert', depth:7 },
+    { key:'easy', depth:2 },
+    { key:'medium', depth:4 },
+    { key:'hard', depth:6 },
+    { key:'expert', depth:7 },
   ];
   const ORDERED_COLS = [3,4,2,5,1,6,0];
   const ENABLE_SELF_TESTS = true;
@@ -179,6 +270,8 @@
   let winningLine = [];
   let winner = null; // 'R' | 'Y' | 'DRAW' | null
   let hoverCol = null;
+  // language management
+  let lang = loadLS('cf_lang', null) || (navigator.language && navigator.language.toLowerCase().startsWith('en') ? 'en' : 'fr');
   let difficulty = loadLS('cf_difficulty', DIFFICULTY_PRESETS[1]);
   let mode = loadLS('cf_mode', '1J');
   let aiColor = loadLS('cf_ai_color', YELLOW);
@@ -203,6 +296,11 @@
   const $overlayTitle = document.getElementById('overlayTitle');
   const $selfcheck = document.getElementById('selfcheck');
 
+  const $langBtn = document.getElementById('langBtn');
+  const $appTitle = document.getElementById('appTitle');
+  const $pageTitle = document.getElementById('pageTitle');
+  const $hintText = document.getElementById('hintText');
+
   // Controls
   const $m1 = document.getElementById('m1');
   const $m2 = document.getElementById('m2');
@@ -219,13 +317,57 @@
   const $replay = document.getElementById('replay');
   const $swapStarter = document.getElementById('swapStarter');
 
+  // —— I18N helpers ——
+  function t(key, replacements){
+    const s = (I18N[lang] && I18N[lang][key]) ? I18N[lang][key] : key;
+    if(!replacements) return s;
+    return s.replace(/\{(\w+)\}/g, (_, k) => replacements[k] ?? '');
+  }
+  function applyStaticTranslations(){
+    // page and header
+    $pageTitle.textContent = t('pageTitle');
+    $appTitle.textContent = t('appTitle');
+    $langBtn.textContent = t('langBtn');
+    // labels/buttons marked with data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key = el.getAttribute('data-i18n');
+      el.innerHTML = t(key);
+    });
+    // titles for action buttons
+    document.querySelectorAll('[data-i18n-title]').forEach(el=>{
+      const k = el.getAttribute('data-i18n-title');
+      el.title = t(k);
+    });
+    // hint and selfcheck
+    $hintText.innerHTML = t('hint');
+    // update page title attribute
+    document.title = t('pageTitle');
+  }
+
+  function setLang(newLang){
+    if(newLang!== 'en' && newLang !== 'fr') return;
+    lang = newLang;
+    saveLS('cf_lang', lang);
+    applyStaticTranslations();
+    renderAll(); // re-render dynamic strings
+  }
+  $langBtn.onclick = () => setLang(lang==='fr' ? 'en' : 'fr');
+
   // —— UI init ——
-  DIFFICULTY_PRESETS.forEach(p => {
-    const opt = document.createElement('option');
-    opt.value = p.key; opt.textContent = p.label;
-    if (p.key === difficulty.key) opt.selected = true;
-    $difficulty.appendChild(opt);
-  });
+  // populate difficulty select with translated labels
+  function populateDifficulty(){
+    $difficulty.innerHTML = '';
+    DIFFICULTY_PRESETS.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.key;
+      opt.textContent = t('difficulty_' + p.key);
+      // if current saved difficulty is an object with key, check equality
+      if((difficulty && difficulty.key ? difficulty.key : difficulty.key === undefined ? difficulty.key : undefined) === p.key) opt.selected = true;
+      // fallback: if difficulty.key undefined but difficulty.depth matches, try to mark
+      if(!opt.selected && difficulty && difficulty.depth === p.depth) opt.selected = true;
+      $difficulty.appendChild(opt);
+    });
+  }
 
   // —— Board init (cells) ——
   function buildCells(){
@@ -313,6 +455,10 @@
 
   // —— UI rendering ——
   function renderAll(){
+    // apply dynamic translations first (so labels reflect language)
+    applyStaticTranslations();
+    populateDifficulty();
+
     // mode buttons
     $m1.classList.toggle('sel', mode==='1J');
     $m2.classList.toggle('sel', mode==='2J');
@@ -323,18 +469,21 @@
     // starter
     $startR.classList.toggle('sel', turn===RED && !winner);
     $startY.classList.toggle('sel', turn===YELLOW && !winner);
-    // status
+
+    // status (dynamic texts)
     const humanColor = mode==='1J' ? (aiColor===RED?YELLOW:RED) : null;
     let txt = '';
-    if(winner==='DRAW') txt = 'Match nul. Rejouez !';
-    else if(winner===RED) txt = 'Rouge gagne !';
-    else if(winner===YELLOW) txt = 'Jaune gagne !';
-    else if(mode==='1J') txt = (turn===humanColor ? "À toi de jouer (humain)." : "L'IA réfléchit…");
-    else txt = (turn===RED ? 'Tour des Rouges.' : 'Tour des Jaunes.');
+    if(winner==='DRAW') txt = t('status_draw');
+    else if(winner===RED) txt = t('status_red_win');
+    else if(winner===YELLOW) txt = t('status_yellow_win');
+    else if(mode==='1J') txt = (turn===humanColor ? t('status_human_turn') : t('status_ai_thinking'));
+    else txt = (turn===RED ? t('status_red_turn') : t('status_yellow_turn'));
     $status.textContent = txt;
+
     // turn pill
-    $turnText.textContent = turn===RED ? 'Rouge' : 'Jaune';
+    $turnText.textContent = turn===RED ? t('red') : t('yellow');
     $turnDot.style.background = turn===RED ? 'var(--red)' : 'var(--amber)';
+
     // scores
     $scoreR.textContent = scores.R|0; $scoreY.textContent = scores.Y|0; $scoreD.textContent = scores.D|0;
 
@@ -343,8 +492,10 @@
     renderGhost();
 
     // overlay
-    if(winner){ $overlay.style.display='flex'; $overlayTitle.textContent = winner==='DRAW' ? 'Match nul 🤝' : (winner===RED?'Rouge gagne !':'Jaune gagne !'); }
-    else { $overlay.style.display='none' }
+    if(winner){
+      $overlay.style.display='flex';
+      $overlayTitle.textContent = (winner==='DRAW' ? t('overlay_draw') : (winner===RED ? t('overlay_red_win') : t('overlay_yellow_win')));
+    } else { $overlay.style.display='none' }
 
     // buttons disabled
     const canUndo = history.length>0 && !winner;
@@ -427,7 +578,8 @@
   function thinkAndMoveAI(){
     isThinking = true; renderAll();
     setTimeout(() => {
-      const col = bestMoveWithDifficulty(board, aiColor, DIFFICULTY_PRESETS.find(p=>p.key===difficulty.key)?.depth || difficulty.depth || 4);
+      const depth = DIFFICULTY_PRESETS.find(p=>p.key===difficulty.key)?.depth || difficulty.depth || 4;
+      const col = bestMoveWithDifficulty(board, aiColor, depth);
       if(col==null){ isThinking=false; renderAll(); return }
       const dropped = dropPiece(board, col, aiColor);
       if(!dropped){ isThinking=false; renderAll(); return }
@@ -456,7 +608,11 @@
   // —— Event wiring ——
   $m1.onclick = () => { mode='1J'; saveLS('cf_mode',mode); newGame(false) }
   $m2.onclick = () => { mode='2J'; saveLS('cf_mode',mode); newGame(false) }
-  $difficulty.onchange = () => { const preset = DIFFICULTY_PRESETS.find(p=>p.key===$difficulty.value)||DIFFICULTY_PRESETS[1]; difficulty=preset; saveLS('cf_difficulty',difficulty); }
+  $difficulty.onchange = () => {
+    const preset = DIFFICULTY_PRESETS.find(p=>p.key===$difficulty.value)||DIFFICULTY_PRESETS[1];
+    difficulty = { key: preset.key, depth: preset.depth };
+    saveLS('cf_difficulty',difficulty);
+  }
   $startR.onclick = () => { turn=RED; if(mode==='1J') aiColor=YELLOW; saveLS('cf_ai_color',aiColor); newGame(false) }
   $startY.onclick = () => { turn=YELLOW; if(mode==='1J') aiColor=RED; saveLS('cf_ai_color',aiColor); newGame(false) }
   $aiR.onclick = () => { aiColor=RED; turn=YELLOW; saveLS('cf_ai_color',aiColor); newGame(false) }
@@ -496,8 +652,9 @@
   // —— Boot ——
   (function boot(){
     buildCells();
+    populateDifficulty();
     const res = runSelfTests();
-    $selfcheck.textContent = res.passed ? 'Self‑check OK' : `Tests à corriger (${res.details.length})`;
+    $selfcheck.textContent = res.passed ? t('selfcheck_ok') : t('selfcheck_fail', { n: res.details.length });
     $selfcheck.style.color = res.passed ? '#86efac' : '#fbbf24';
     if(!res.passed){ console.warn('[Self-tests]', res.details); }
     renderAll();
