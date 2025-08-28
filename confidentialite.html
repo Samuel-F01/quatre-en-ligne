@@ -6,42 +6,38 @@
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0ea5e9">
   <title>Politique de confidentialité – Quatre en ligne</title>
-  <meta name="description" content="Politique de confidentialité de l’application Quatre en ligne (FR/EN).">
+  <meta name="description" content="Politique de confidentialité de l’app Quatre en ligne (FR/EN).">
   <style>
     :root{
       --bg:#0b1220; --bg-soft:#111827; --fg:#e5e7eb; --fg-dim:#bcc1cd;
       --brand:#0ea5e9; --brand-2:#22d3ee; --ring:rgba(34,211,238,.35);
       --maxw:1100px; --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.25);
-      --s-1:8px; --s-2:12px; --s-3:16px; --s-4:24px; --s-5:32px; --s-6:48px;
+      --s-2:12px; --s-3:16px; --s-4:24px; --s-5:32px; --s-6:48px;
     }
     @media (prefers-color-scheme: light){
-      :root{--bg:#f8fafc;--bg-soft:#fff;--fg:#0b1220;--fg-dim:#475569;--ring:rgba(14,165,233,.25)}
+      :root{--bg:#f8fafc;--bg-soft:#ffffff;--fg:#0b1220;--fg-dim:#475569;--ring:rgba(14,165,233,.25)}
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
-    a{color:var(--brand);text-decoration:none}
-    a:hover{text-decoration:underline}
+    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
     .container{max-width:var(--maxw);margin-inline:auto;padding:clamp(16px,4vw,24px)}
-    .card{background:var(--bg-soft);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.06)}
-    header{position:sticky;top:0;background:rgba(17,24,39,.75);backdrop-filter:saturate(120%) blur(8px);z-index:40;border-bottom:1px solid rgba(255,255,255,.06)}
+    .card{background:var(--bg-soft);border-radius:14px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.06)}
+    .panel{padding:var(--s-5)} @media(max-width:540px){.panel{padding:var(--s-4)}}
+    .flow>*+*{margin-top:var(--flow, var(--s-4))}
+    .muted{color:var(--fg-dim)}
+    h1{font-size:clamp(1.8rem,4vw,2.4rem);margin:0}
+    h2{font-size:clamp(1.2rem,3vw,1.6rem);margin:0}
+
+    /* Header simplifié (opaque, non-sticky) */
+    header{background:var(--bg-soft);border-bottom:1px solid rgba(255,255,255,.08)}
     header .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:12px}
     .brand{display:flex;align-items:center;gap:.7rem;font-weight:800}
-    .brand a{display:flex;align-items:center;gap:.7rem;color:inherit;text-decoration:none}
+    .brand a{display:flex;align-items:center;gap:.7rem;color:inherit}
     .logo{inline-size:36px;block-size:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;color:#fff;font-weight:900}
-    .lang{display:flex;gap:.4rem;align-items:center}
-    .btn{display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(90deg,var(--brand),var(--brand-2));color:#fff;border:0;border-radius:999px;padding:.55rem .9rem;font-weight:700}
-    .btn:focus{outline:3px solid var(--ring);outline-offset:3px}
     .seg{display:inline-flex;border:1px solid rgba(255,255,255,.12);border-radius:999px;overflow:hidden}
     .seg button{background:transparent;color:var(--fg);border:0;padding:.45rem .8rem;cursor:pointer}
     .seg button[aria-current="true"]{background:rgba(255,255,255,.08)}
-
-    h1{font-size:clamp(1.8rem,4vw,2.4rem);margin:.2rem 0 0}
-    h2{font-size:clamp(1.2rem,3vw,1.5rem);margin:0}
-    .muted{color:var(--fg-dim)}
-    .flow>*+*{margin-top:var(--flow, var(--s-4))}
-    main{padding-block:var(--s-5)}
-    .panel{padding:var(--s-5)}
-    @media(max-width:540px){.panel{padding:var(--s-4)}}
+    .lang{display:flex;gap:.4rem;align-items:center}
 
     footer{padding-block:var(--s-5);border-top:1px solid rgba(255,255,255,.08);color:var(--fg-dim);text-align:center}
   </style>
@@ -52,7 +48,7 @@
       <div class="brand">
         <a href="index.html"><div class="logo">★</div><span>Quatre en ligne</span></a>
       </div>
-      <div class="lang">
+      <div class="lang" aria-label="Language">
         <div class="seg" role="tablist" aria-label="Language switcher">
           <button id="btn-fr" role="tab" aria-selected="true" aria-current="true">FR</button>
           <button id="btn-en" role="tab" aria-selected="false">EN</button>
@@ -61,8 +57,8 @@
     </div>
   </header>
 
-  <main class="container">
-    <!-- FRANÇAIS -->
+  <main class="container" style="padding-block:var(--s-6)">
+    <!-- FR -->
     <article id="fr" class="card panel flow" lang="fr">
       <header class="flow" style="--flow:12px">
         <h1>Politique de confidentialité</h1>
@@ -70,48 +66,43 @@
       </header>
 
       <section class="flow">
-        <p><strong>Quatre en ligne</strong> est une application contenant de la publicité. Les réseaux publicitaires de Google peuvent collecter certaines informations pour diffuser et mesurer les annonces. <strong>Le développeur ne collecte, ne stocke ni ne vend aucune donnée personnelle supplémentaire</strong> au-delà de ce qui est traité par les partenaires publicitaires.</p>
+        <p><strong>Quatre en ligne</strong> contient des publicités. Les réseaux publicitaires de Google peuvent collecter certaines informations pour diffuser et mesurer les annonces. <strong>Le développeur ne collecte, ne stocke ni ne vend aucune donnée personnelle supplémentaire</strong> en dehors de ce que traitent les partenaires publicitaires.</p>
       </section>
 
       <section class="flow">
-        <h2>Quelles données sont traitées&nbsp;?</h2>
+        <h2>Données traitées</h2>
         <ul>
-          <li><strong>Données liées à la publicité (par Google)</strong> : identifiants publicitaires de l’appareil (ex. IDFA/AAID), informations de l’appareil, estimations de localisation approximative, interactions avec les annonces, à des fins de diffusion et mesure des publicités.</li>
-          <li><strong>Aucune collecte par le développeur</strong> : l’app ne crée pas de compte et le développeur n’exploite pas d’analytics ni de serveur pour collecter des données personnelles.</li>
+          <li><strong>Données liées à la publicité (par Google)</strong> : identifiants publicitaires (IDFA/AAID), infos appareil, localisation approximative, interactions avec les annonces, pour la diffusion et la mesure.</li>
+          <li><strong>Aucune collecte par le développeur</strong> : pas de compte, pas d’analytics maison, pas de serveur recevant vos données personnelles.</li>
         </ul>
-        <p class="muted">Pour en savoir plus sur la manière dont Google traite les données publicitaires, consultez la politique de Google&nbsp;: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">policies.google.com/technologies/ads</a>.</p>
+        <p class="muted">En savoir plus&nbsp;: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">policies.google.com/technologies/ads</a>.</p>
       </section>
 
       <section class="flow">
-        <h2>Contrôles et choix</h2>
+        <h2>Vos choix</h2>
         <ul>
-          <li><strong>Publicités personnalisées</strong> : vous pouvez activer/désactiver la personnalisation des annonces via les paramètres de votre appareil ou la page des préférences publicitaires de Google.</li>
-          <li><strong>Identifiant publicitaire</strong> : vous pouvez le réinitialiser depuis les réglages de votre appareil.</li>
+          <li><strong>Publicités personnalisées</strong> : activez/désactivez la personnalisation dans les réglages de l’appareil ou les paramètres d’annonces Google.</li>
+          <li><strong>Identifiant publicitaire</strong> : vous pouvez le réinitialiser dans les réglages de l’appareil.</li>
         </ul>
-      </section>
-
-      <section class="flow">
-        <h2>Enfants</h2>
-        <p>L’application s’adresse à un public général. <strong>Nous ne collectons pas sciemment de données personnelles d’enfants</strong>. Si vous pensez qu’un enfant nous a fourni des informations via la publicité, veuillez nous contacter pour que nous prenions les mesures appropriées.</p>
       </section>
 
       <section class="flow">
         <h2>Transferts & tiers</h2>
-        <p>Les partenaires publicitaires (comme Google) peuvent traiter des données sur des serveurs situés dans différents pays. Le développeur ne reçoit pas ces données.</p>
+        <p>Les partenaires publicitaires (ex.&nbsp;: Google) peuvent traiter des données sur des serveurs situés dans différents pays. Le développeur ne reçoit pas ces données.</p>
       </section>
 
       <section class="flow">
-        <h2>Modifications de cette politique</h2>
-        <p>Nous pouvons mettre à jour cette politique pour refléter des changements légaux ou techniques. La date en haut de page indique la dernière mise à jour.</p>
+        <h2>Modifications</h2>
+        <p>Cette politique peut évoluer (exigences légales/techniques). La date ci-dessus indique la dernière mise à jour.</p>
       </section>
 
       <section class="flow">
         <h2>Contact</h2>
-        <p>Pour toute question, écrivez à&nbsp;: <a href="mailto:bobcats_triton.0k@icloud.com">bobcats_triton.0k@icloud.com</a></p>
+        <p>Questions&nbsp;? <a href="mailto:bobcats_triton.0k@icloud.com">bobcats_triton.0k@icloud.com</a></p>
       </section>
     </article>
 
-    <!-- ENGLISH -->
+    <!-- EN -->
     <article id="en" class="card panel flow" lang="en" hidden>
       <header class="flow" style="--flow:12px">
         <h1>Privacy Policy</h1>
@@ -119,44 +110,39 @@
       </header>
 
       <section class="flow">
-        <p><strong>Quatre en ligne</strong> includes ads. Google’s advertising networks may collect certain information to serve and measure ads. <strong>The developer does not collect, store, or sell any additional personal data</strong> beyond what is processed by advertising partners.</p>
+        <p><strong>Quatre en ligne</strong> includes ads. Google’s ad networks may collect certain information to serve and measure ads. <strong>The developer does not collect, store, or sell any additional personal data</strong> beyond what is processed by advertising partners.</p>
       </section>
 
       <section class="flow">
-        <h2>What data is processed?</h2>
+        <h2>Data processed</h2>
         <ul>
-          <li><strong>Ads-related data (by Google)</strong>: device advertising identifiers (e.g., IDFA/AAID), device information, approximate location, and ad interaction data, used for ad delivery and measurement.</li>
-          <li><strong>No developer collection</strong>: the app does not create an account, and the developer does not run analytics or a backend to collect personal data.</li>
+          <li><strong>Ads-related data (by Google)</strong>: device advertising IDs (IDFA/AAID), device info, approximate location, ad interactions—for ad delivery and measurement.</li>
+          <li><strong>No developer collection</strong>: no account, no first-party analytics, no backend receiving your personal data.</li>
         </ul>
-        <p class="muted">Learn more about how Google uses data for ads: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">policies.google.com/technologies/ads</a>.</p>
+        <p class="muted">Learn more: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">policies.google.com/technologies/ads</a>.</p>
       </section>
 
       <section class="flow">
         <h2>Your choices</h2>
         <ul>
-          <li><strong>Personalized ads</strong>: you can enable/disable ad personalization in your device settings or Google’s ad settings page.</li>
+          <li><strong>Personalized ads</strong>: enable/disable in your device settings or Google’s ad settings.</li>
           <li><strong>Advertising ID</strong>: you can reset it in your device settings.</li>
         </ul>
       </section>
 
       <section class="flow">
-        <h2>Children</h2>
-        <p>The app targets a general audience. <strong>We do not knowingly collect personal data from children</strong>. If you believe a child submitted information via ads, please contact us so we can take appropriate action.</p>
-      </section>
-
-      <section class="flow">
         <h2>Transfers & third parties</h2>
-        <p>Advertising partners (such as Google) may process data on servers in various countries. The developer does not receive this data.</p>
+        <p>Advertising partners (e.g., Google) may process data on servers in various countries. The developer does not receive this data.</p>
       </section>
 
       <section class="flow">
-        <h2>Changes to this policy</h2>
-        <p>We may update this policy to reflect legal or technical changes. The date at the top shows the latest update.</p>
+        <h2>Changes</h2>
+        <p>We may update this policy to reflect legal/technical changes. The date above shows the latest update.</p>
       </section>
 
       <section class="flow">
         <h2>Contact</h2>
-        <p>Questions? Email: <a href="mailto:bobcats_triton.0k@icloud.com">bobcats_triton.0k@icloud.com</a></p>
+        <p>Questions? <a href="mailto:bobcats_triton.0k@icloud.com">bobcats_triton.0k@icloud.com</a></p>
       </section>
     </article>
   </main>
@@ -169,7 +155,7 @@
     // year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // language toggler
+    // language toggle (simple)
     const fr = document.getElementById('fr');
     const en = document.getElementById('en');
     const btnFr = document.getElementById('btn-fr');
@@ -183,12 +169,12 @@
       btnFr.setAttribute('aria-selected', String(isFr));
       btnEn.setAttribute('aria-current', !isFr ? 'true' : 'false');
       btnEn.setAttribute('aria-selected', String(!isFr));
-      // mémorise le choix
       try{ localStorage.setItem('ql_lang', lang); }catch(e){}
     }
+
     btnFr.addEventListener('click', ()=> setLang('fr'));
     btnEn.addEventListener('click', ()=> setLang('en'));
-    // init depuis stockage / navigateur
+
     const saved = (()=>{ try{return localStorage.getItem('ql_lang')}catch(e){return null} })();
     const navLang = (navigator.language || 'fr').toLowerCase().startsWith('en') ? 'en' : 'fr';
     setLang(saved || navLang);
