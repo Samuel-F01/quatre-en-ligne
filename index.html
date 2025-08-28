@@ -58,7 +58,7 @@
       .nav-open nav ul{display:flex;flex-direction:column;gap:.25rem;position:absolute;inset-inline:0;top:64px;background:var(--bg-soft);padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
     }
 
-    /* Hero sans image (fond animé très léger) */
+    /* Hero avec grande image */
     .hero{position:relative;isolation:isolate;padding-block:var(--s-7)}
     .hero::before,
     .hero::after{
@@ -68,6 +68,7 @@
     }
     .hero::after{inset:-35% -25% auto -25%;opacity:.18;animation-duration:20s}
     @keyframes float{from{transform:translateY(-8px)}to{transform:translateY(8px)}}
+
     .hero-inner{max-width:850px;margin-inline:auto;text-align:center}
     .kicker{color:var(--brand-2);font-weight:700;letter-spacing:.25em;text-transform:uppercase;font-size:.8rem}
     h1{font-size:clamp(2rem,4.6vw,3.2rem);line-height:1.1;margin:var(--s-2) 0 0}
@@ -75,6 +76,11 @@
     .cta{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-top:var(--s-4)}
     .badges{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-top:var(--s-3)}
     .badge{padding:.35rem .6rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);font-size:.9rem}
+
+    /* Grande image */
+    .hero-picture{margin-top:var(--s-5);perspective:900px}
+    .hero-img{border-radius:16px;box-shadow:0 18px 60px rgba(14,165,233,.25);transition:transform .6s var(--ease)}
+    .hero-img:hover{transform:rotateX(4deg) rotateY(-4deg)}
 
     /* Sections */
     section{padding-block:var(--s-6)}
@@ -95,6 +101,7 @@
     @media (prefers-reduced-motion: reduce){
       .hero::before,.hero::after,.btn::after{animation:none}
       .reveal{opacity:1;transform:none}
+      .hero-img{transition:none}
     }
   </style>
 </head>
@@ -116,18 +123,20 @@
   </header>
 
   <main id="contenu">
-    <!-- HERO (sans image) -->
+    <!-- HERO (avec grande image) -->
     <section class="hero container">
       <div class="hero-inner">
         <span class="kicker">Connect Four, version premium</span>
         <h1>Quatre en ligne !</h1>
 
-</p> <!-- Image de hero avec <picture> (WebP + JPG de secours). Mettez vos propres fichiers dans images/ --> 
-<picture> 
-<source srcset="images/hero.webp" type="image/webp"> 
-<img src="images/hero.jpg" alt="Image de couverture" width="1600" height="900" loading="eager" fetchpriority="high" decoding="async" class="card" /> 
-</picture>
-        
+        <!-- >>> Grande image comme avant <<< -->
+        <div class="hero-picture">
+          <picture>
+            <source srcset="images/hero.webp" type="image/webp">
+            <img class="hero-img card" src="images/hero.jpg" alt="Aperçu du jeu Quatre en ligne" width="1600" height="900" loading="eager" decoding="async">
+          </picture>
+        </div>
+
         <p class="lead">Le classique, réinventé : thèmes multiples, IA de plusieurs niveaux, et une expérience soignée sur iPhone, iPad, Mac (puce Apple) et Vision Pro.</p>
         <div class="cta">
           <a class="btn" href="https://apps.apple.com/app/quatre-en-ligne/id6751297809" target="_blank" rel="noopener">Télécharger</a>
@@ -222,6 +231,20 @@
       document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
     } else {
       document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+    }
+
+    // tilt léger sur la grande image (si présente)
+    const heroImg = document.querySelector('.hero-img');
+    if (heroImg && !reduce){
+      const maxTilt = 8;
+      const reset = () => heroImg.style.transform = 'rotateX(0) rotateY(0)';
+      heroImg.addEventListener('pointermove', (e)=>{
+        const r = heroImg.getBoundingClientRect();
+        const x = (e.clientX - r.left)/r.width - .5;
+        const y = (e.clientY - r.top)/r.height - .5;
+        heroImg.style.transform = `rotateX(${(y*-maxTilt).toFixed(1)}deg) rotateY(${(x*maxTilt).toFixed(1)}deg)`;
+      });
+      ['pointerleave','blur'].forEach(ev=>heroImg.addEventListener(ev, reset));
     }
 
     // ripple léger sur les boutons
