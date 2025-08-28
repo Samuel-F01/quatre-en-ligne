@@ -6,66 +6,85 @@
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0ea5e9">
   <title>Apprendre à jouer – Quatre en ligne</title>
-  <meta name="description" content="Règles simples et conseils pour maîtriser Quatre en ligne.">
+  <meta name="description" content="Règles simples, conseils et schémas pour maîtriser Quatre en ligne.">
   <style>
     :root{
       --bg:#0b1220; --bg-soft:#111827; --fg:#e5e7eb; --fg-dim:#bcc1cd;
       --brand:#0ea5e9; --brand-2:#22d3ee; --ring:rgba(34,211,238,.35);
-      --maxw:1000px; --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.25);
+      --maxw:1100px; --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.25);
+      --s-1:8px; --s-2:12px; --s-3:16px; --s-4:24px; --s-5:32px; --s-6:48px; --s-7:64px;
       --ease:cubic-bezier(.2,.7,.2,1);
     }
     @media (prefers-color-scheme: light){
-      :root{--bg:#f8fafc;--bg-soft:#ffffff;--fg:#0b1220;--fg-dim:#475569;--ring:rgba(14,165,233,.25)}
+      :root{--bg:#f8fafc;--bg-soft:#fff;--fg:#0b1220;--fg-dim:#475569;--ring:rgba(14,165,233,.25)}
     }
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .container{max-width:var(--maxw);margin-inline:auto;padding:clamp(16px,2vw,24px)}
+    .container{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(16px,4vw,24px)}
+    main{scroll-padding-top:72px}
+
     header{position:sticky;top:0;background:rgba(17,24,39,.75);backdrop-filter:saturate(120%) blur(8px);z-index:40;border-bottom:1px solid rgba(255,255,255,.06)}
-    header .wrap{display:flex;align-items:center;justify-content:space-between}
+    header .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:12px}
     .brand{display:flex;align-items:center;gap:.7rem;font-weight:800}
     .brand a{display:flex;align-items:center;gap:.7rem;color:inherit}
     .logo{inline-size:36px;block-size:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;color:#fff;font-weight:900}
-    nav ul{display:flex;gap:1rem;list-style:none;margin:0;padding:0}
-    nav a{display:block;padding:.8rem .9rem;border-radius:10px}
+    nav ul{display:flex;gap:.5rem;list-style:none;margin:0;padding:0}
+    nav a{display:block;padding:.7rem .85rem;border-radius:10px}
+
     .card{background:var(--bg-soft);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.06)}
-    h1{font-size:clamp(1.8rem,4vw,2.6rem);margin:.2rem 0 0}
-    h2{font-size:clamp(1.3rem,3vw,1.8rem);margin:0 0 .2rem}
+    h1{font-size:clamp(1.8rem,4vw,2.6rem);margin:0}
+    h2{font-size:clamp(1.35rem,3vw,1.9rem);margin:0}
     .muted{color:var(--fg-dim)}
-    .row{display:grid;gap:16px;grid-template-columns:repeat(12,1fr)}
-    .row>*{grid-column:span 12}
-    @media(min-width:760px){.row-2>*{grid-column:span 6}}
+    .flow>*+*{margin-top:var(--flow, var(--s-4))}
 
-    .panel{padding:18px}
-    .pill{display:inline-block;padding:.35rem .6rem;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)}
-    .reveal{opacity:0;transform:translateY(12px);transition:opacity .6s var(--ease), transform .6s var(--ease)}
-    .reveal.in{opacity:1;transform:none}
+    /* grille principale : aside (sommaire) + contenu */
+    .layout{display:grid;gap:var(--s-6);grid-template-columns:1fr}
+    @media(min-width:980px){.layout{grid-template-columns:260px 1fr}}
 
-    /* Schémas statiques (SVG responsive) */
-    .diagram{display:block;width:100%;max-width:640px;margin-inline:auto}
-    .legend{font-size:.9rem;color:var(--fg-dim);text-align:center}
+    /* sommaire */
+    .toc{position:relative}
+    .toc .box{position:sticky;top:84px}
+    .toc a{display:block;padding:.5rem .6rem;border-radius:10px;color:inherit}
+    .toc a:hover{background:rgba(255,255,255,.06);text-decoration:none}
+    .toc ol{list-style:none;margin:0;padding:0;display:grid;gap:.1rem}
+    .toc small{color:var(--fg-dim)}
 
-    /* Accordéon FAQ */
+    /* cartes de section */
+    .panel{padding:var(--s-5)}
+    @media(max-width:540px){.panel{padding:var(--s-4)}}
+
+    /* listes bien espacées */
+    ol, ul{padding-left:1.2rem}
+    ol li+li, ul li+li{margin-top:.4rem}
+
+    /* schémas SVG responsives */
+    .diagram{display:block;width:100%;max-width:720px;margin-inline:auto}
+    .legend{font-size:.95rem;color:var(--fg-dim);text-align:center;margin-top:.5rem}
+
+    /* tips en grille */
+    .tips{display:grid;gap:var(--s-3);grid-template-columns:1fr}
+    @media(min-width:760px){.tips{grid-template-columns:1fr 1fr}}
+
+    /* FAQ (accordéon) */
     details{border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;background:var(--bg-soft)}
     details+details{margin-top:10px}
     summary{cursor:pointer;font-weight:600;list-style:none}
     summary::-webkit-details-marker{display:none}
 
-    footer{padding-block:40px;border-top:1px solid rgba(255,255,255,.08);color:var(--fg-dim)}
+    footer{padding-block:var(--s-6);border-top:1px solid rgba(255,255,255,.08);color:var(--fg-dim);text-align:center}
+
     @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none}}
+    .reveal{opacity:0;transform:translateY(12px);transition:opacity .5s var(--ease), transform .5s var(--ease)}
+    .reveal.in{opacity:1;transform:none}
   </style>
 </head>
 <body>
   <a class="sr-only" href="#contenu">Aller au contenu</a>
   <header>
     <div class="container wrap">
-      <div class="brand" aria-label="Accueil">
-        <a href="index.html">
-          <div class="logo" aria-hidden="true">★</div>
-          <span>Quatre en ligne</span>
-        </a>
-      </div>
+      <div class="brand"><a href="index.html"><div class="logo">★</div><span>Quatre en ligne</span></a></div>
       <nav aria-label="Navigation principale">
         <ul>
           <li><a href="index.html">Accueil</a></li>
@@ -75,156 +94,165 @@
     </div>
   </header>
 
-  <main id="contenu" class="container">
-    <section class="row">
-      <div class="card panel reveal" style="grid-column:span 12">
-        <h1>Apprendre à jouer</h1>
-        <p class="muted">L’objectif : aligner 4 pions de votre couleur horizontalement, verticalement ou en diagonale, avant l’adversaire.</p>
-      </div>
-    </section>
+  <main id="contenu" class="container" style="padding-block:var(--s-6)">
+    <div class="layout">
+      <!-- SOMMAIRE (collant sur desktop) -->
+      <aside class="toc">
+        <div class="box card" style="padding:var(--s-4)">
+          <strong>Sommaire</strong>
+          <small class="muted" style="display:block;margin-top:.25rem">Tout ce qu’il faut, d’un coup d’œil</small>
+          <ol style="margin-top:var(--s-3)">
+            <li><a href="#regles">Règles rapides</a></li>
+            <li><a href="#schema">Schémas d’alignements</a></li>
+            <li><a href="#conseils">Conseils</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ol>
+        </div>
+      </aside>
 
-    <section class="row row-2">
-      <div class="card panel reveal">
-        <h2>Règles rapides</h2>
-        <ol>
-          <li>Chaque joueur joue à tour de rôle et <strong>lâche un pion</strong> dans l’une des 7 colonnes.</li>
-          <li>Le pion tombe jusqu’à la <strong>première case libre</strong> de la colonne.</li>
-          <li><strong>4 alignés</strong> (horizontal, vertical, ou diagonal) = victoire.</li>
-          <li>Si la grille est pleine sans alignement, c’est <strong>match nul</strong>.</li>
-        </ol>
-      </div>
+      <!-- CONTENU -->
+      <div class="content flow" style="--flow: var(--s-6)">
+        <section class="card panel reveal">
+          <div class="flow">
+            <h1>Apprendre à jouer</h1>
+            <p class="muted">L’objectif : aligner 4 pions de votre couleur (horizontal, vertical ou diagonal) avant votre adversaire.</p>
+          </div>
+        </section>
 
-      <div class="card panel reveal">
-        <h2>Vue d’ensemble</h2>
-        <!-- Schéma statique SVG (aucune interaction de jeu) -->
-        <svg class="diagram" viewBox="0 0 700 600" role="img" aria-label="Plateau 7 colonnes par 6 rangées avec exemples d’alignements">
-          <defs>
-            <radialGradient id="hole" cx="30%" cy="30%">
-              <stop offset="0%" stop-color="#ffffff22"/><stop offset="70%" stop-color="#00000066"/>
-            </radialGradient>
-          </defs>
-          <!-- fond -->
-          <rect x="0" y="0" width="700" height="600" rx="22" fill="#0f172a"/>
-          <!-- trous -->
-          <g fill="url(#hole)">
-            <!-- 6 lignes x 7 colonnes -->
-            <script type="application/ecmascript"><![CDATA[
-              // (ignoré par navigateurs pour l’accessibilité) – juste visuel statique
-            ]]></script>
-          </g>
-          <!-- Dessin des trous -->
-          <!-- on dessine via répétition manuelle pour rester simple -->
-          <!-- Lignes (y: 70 + i*85), Colonnes (x: 50 + j*95), rayon ~34 -->
-          <!-- Généré à la main rapidement -->
-          <!-- row 0 -->
-          <g>
-            <circle cx="50" cy="70" r="34" fill="url(#hole)"/><circle cx="145" cy="70" r="34" fill="url(#hole)"/><circle cx="240" cy="70" r="34" fill="url(#hole)"/><circle cx="335" cy="70" r="34" fill="url(#hole)"/><circle cx="430" cy="70" r="34" fill="url(#hole)"/><circle cx="525" cy="70" r="34" fill="url(#hole)"/><circle cx="620" cy="70" r="34" fill="url(#hole)"/>
-          </g>
-          <!-- row 1 -->
-          <g>
-            <circle cx="50" cy="155" r="34" fill="url(#hole)"/><circle cx="145" cy="155" r="34" fill="url(#hole)"/><circle cx="240" cy="155" r="34" fill="url(#hole)"/><circle cx="335" cy="155" r="34" fill="url(#hole)"/><circle cx="430" cy="155" r="34" fill="url(#hole)"/><circle cx="525" cy="155" r="34" fill="url(#hole)"/><circle cx="620" cy="155" r="34" fill="url(#hole)"/>
-          </g>
-          <!-- row 2 -->
-          <g>
-            <circle cx="50" cy="240" r="34" fill="url(#hole)"/><circle cx="145" cy="240" r="34" fill="url(#hole)"/><circle cx="240" cy="240" r="34" fill="url(#hole)"/><circle cx="335" cy="240" r="34" fill="url(#hole)"/><circle cx="430" cy="240" r="34" fill="url(#hole)"/><circle cx="525" cy="240" r="34" fill="url(#hole)"/><circle cx="620" cy="240" r="34" fill="url(#hole)"/>
-          </g>
-          <!-- row 3 -->
-          <g>
-            <circle cx="50" cy="325" r="34" fill="url(#hole)"/><circle cx="145" cy="325" r="34" fill="url(#hole)"/><circle cx="240" cy="325" r="34" fill="url(#hole)"/><circle cx="335" cy="325" r="34" fill="url(#hole)"/><circle cx="430" cy="325" r="34" fill="url(#hole)"/><circle cx="525" cy="325" r="34" fill="url(#hole)"/><circle cx="620" cy="325" r="34" fill="url(#hole)"/>
-          </g>
-          <!-- row 4 -->
-          <g>
-            <circle cx="50" cy="410" r="34" fill="url(#hole)"/><circle cx="145" cy="410" r="34" fill="url(#hole)"/><circle cx="240" cy="410" r="34" fill="url(#hole)"/><circle cx="335" cy="410" r="34" fill="url(#hole)"/><circle cx="430" cy="410" r="34" fill="url(#hole)"/><circle cx="525" cy="410" r="34" fill="url(#hole)"/><circle cx="620" cy="410" r="34" fill="url(#hole)"/>
-          </g>
-          <!-- row 5 -->
-          <g>
-            <circle cx="50" cy="495" r="34" fill="url(#hole)"/><circle cx="145" cy="495" r="34" fill="url(#hole)"/><circle cx="240" cy="495" r="34" fill="url(#hole)"/><circle cx="335" cy="495" r="34" fill="url(#hole)"/><circle cx="430" cy="495" r="34" fill="url(#hole)"/><circle cx="525" cy="495" r="34" fill="url(#hole)"/><circle cx="620" cy="495" r="34" fill="url(#hole)"/>
-          </g>
+        <section id="regles" class="card panel reveal">
+          <div class="flow">
+            <h2>Règles rapides</h2>
+            <ol>
+              <li>Jouez à tour de rôle et <strong>lâchez un pion</strong> dans l’une des 7 colonnes.</li>
+              <li>Le pion tombe jusqu’à la <strong>première case libre</strong> de la colonne.</li>
+              <li><strong>4 alignés</strong> (horizontal, vertical ou diagonal) = victoire.</li>
+              <li>Grille pleine sans gagnant : <strong>match nul</strong>.</li>
+            </ol>
+          </div>
+        </section>
 
-          <!-- Pions exemple (rouge / jaune) -->
-          <defs>
-            <radialGradient id="red"><stop offset="0%" stop-color="#fecaca"/><stop offset="70%" stop-color="#ef4444"/></radialGradient>
-            <radialGradient id="yellow"><stop offset="0%" stop-color="#fde68a"/><stop offset="70%" stop-color="#facc15"/></radialGradient>
-          </defs>
-          <!-- exemple d'alignement horizontal rouge -->
-          <g>
-            <circle cx="145" cy="495" r="34" fill="url(#red)"/>
-            <circle cx="240" cy="495" r="34" fill="url(#red)"/>
-            <circle cx="335" cy="495" r="34" fill="url(#red)"/>
-            <circle cx="430" cy="495" r="34" fill="url(#red)"/>
-            <!-- surlignage -->
-            <rect x="140" y="460" width="300" height="70" rx="8" fill="none" stroke="#22c55e" stroke-width="6"/>
-          </g>
-          <!-- quelques pions jaunes dispersés -->
-          <g opacity=".95">
-            <circle cx="50" cy="410" r="34" fill="url(#yellow)"/>
-            <circle cx="525" cy="325" r="34" fill="url(#yellow)"/>
-            <circle cx="620" cy="240" r="34" fill="url(#yellow)"/>
-          </g>
-        </svg>
-        <p class="legend">Exemple d’alignement gagnant (rouge) – schéma purement illustratif.</p>
-      </div>
-    </section>
+        <section id="schema" class="card panel reveal">
+          <div class="flow">
+            <h2>Schémas d’alignements</h2>
+            <!-- schéma simple et clair, bien espacé -->
+            <svg class="diagram" viewBox="0 0 700 520" role="img" aria-label="Plateau 7 colonnes par 6 rangées avec exemple d’alignements gagnants">
+              <defs>
+                <radialGradient id="hole" cx="30%" cy="30%"><stop offset="0%" stop-color="#ffffff22"/><stop offset="70%" stop-color="#00000066"/></radialGradient>
+                <radialGradient id="red"><stop offset="0%" stop-color="#fecaca"/><stop offset="70%" stop-color="#ef4444"/></radialGradient>
+                <radialGradient id="yellow"><stop offset="0%" stop-color="#fde68a"/><stop offset="70%" stop-color="#facc15"/></radialGradient>
+              </defs>
+              <rect x="0" y="0" width="700" height="520" rx="22" fill="#0f172a"/>
+              <!-- trous -->
+              <g fill="url(#hole)">
+                <!-- 6 lignes × 7 colonnes -->
+                <!-- positions rapides (x: 55 + 95*j, y: 60 + 80*i) -->
+                <!-- lignes -->
+                <!-- i=0..5 -->
+                <!-- on dessine en boucles “dépliées” pour rester compatible partout -->
+                <!-- row 0 --> <g>
+                  <circle cx="55" cy="60" r="32"/><circle cx="150" cy="60" r="32"/><circle cx="245" cy="60" r="32"/><circle cx="340" cy="60" r="32"/><circle cx="435" cy="60" r="32"/><circle cx="530" cy="60" r="32"/><circle cx="625" cy="60" r="32"/></g>
+                <!-- row 1 --> <g>
+                  <circle cx="55" cy="140" r="32"/><circle cx="150" cy="140" r="32"/><circle cx="245" cy="140" r="32"/><circle cx="340" cy="140" r="32"/><circle cx="435" cy="140" r="32"/><circle cx="530" cy="140" r="32"/><circle cx="625" cy="140" r="32"/></g>
+                <!-- row 2 --> <g>
+                  <circle cx="55" cy="220" r="32"/><circle cx="150" cy="220" r="32"/><circle cx="245" cy="220" r="32"/><circle cx="340" cy="220" r="32"/><circle cx="435" cy="220" r="32"/><circle cx="530" cy="220" r="32"/><circle cx="625" cy="220" r="32"/></g>
+                <!-- row 3 --> <g>
+                  <circle cx="55" cy="300" r="32"/><circle cx="150" cy="300" r="32"/><circle cx="245" cy="300" r="32"/><circle cx="340" cy="300" r="32"/><circle cx="435" cy="300" r="32"/><circle cx="530" cy="300" r="32"/><circle cx="625" cy="300" r="32"/></g>
+                <!-- row 4 --> <g>
+                  <circle cx="55" cy="380" r="32"/><circle cx="150" cy="380" r="32"/><circle cx="245" cy="380" r="32"/><circle cx="340" cy="380" r="32"/><circle cx="435" cy="380" r="32"/><circle cx="530" cy="380" r="32"/><circle cx="625" cy="380" r="32"/></g>
+                <!-- row 5 --> <g>
+                  <circle cx="55" cy="460" r="32"/><circle cx="150" cy="460" r="32"/><circle cx="245" cy="460" r="32"/><circle cx="340" cy="460" r="32"/><circle cx="435" cy="460" r="32"/><circle cx="530" cy="460" r="32"/><circle cx="625" cy="460" r="32"/></g>
+              </g>
+              <!-- exemples gagnants -->
+              <!-- horizontal rouge -->
+              <g>
+                <circle cx="150" cy="460" r="32" fill="url(#red)"/>
+                <circle cx="245" cy="460" r="32" fill="url(#red)"/>
+                <circle cx="340" cy="460" r="32" fill="url(#red)"/>
+                <circle cx="435" cy="460" r="32" fill="url(#red)"/>
+                <rect x="140" y="420" width="310" height="80" rx="8" fill="none" stroke="#22c55e" stroke-width="6"/>
+              </g>
+              <!-- vertical jaune -->
+              <g>
+                <circle cx="625" cy="380" r="32" fill="url(#yellow)"/>
+                <circle cx="625" cy="300" r="32" fill="url(#yellow)"/>
+                <circle cx="625" cy="220" r="32" fill="url(#yellow)"/>
+                <circle cx="625" cy="140" r="32" fill="url(#yellow)"/>
+                <rect x="585" y="120" width="80" height="300" rx="8" fill="none" stroke="#22c55e" stroke-width="6"/>
+              </g>
+              <!-- diagonal rouge -->
+              <g>
+                <circle cx="55"  cy="300" r="32" fill="url(#red)"/>
+                <circle cx="150" cy="220" r="32" fill="url(#red)"/>
+                <circle cx="245" cy="140" r="32" fill="url(#red)"/>
+                <circle cx="340" cy="60"  r="32" fill="url(#red)"/>
+                <path d="M35,320 L360,40" fill="none" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>
+              </g>
+            </svg>
+            <p class="legend">Exemples d’alignements gagnants (illustrations statiques).</p>
+          </div>
+        </section>
 
-    <section class="row">
-      <div class="card panel reveal">
-        <h2>Conseils rapides</h2>
-        <ul>
-          <li><strong>Centre d’abord</strong> : jouer au milieu crée plus d’opportunités.</li>
-          <li><strong>Bloque les “3 alignés”</strong> adverses avant d’attaquer.</li>
-          <li><strong>Prépare des fourches</strong> (deux menaces en même temps).</li>
-          <li><strong>Anticipe la gravité</strong> : un coup posé aujourd’hui prépare le coup gagnant de demain.</li>
-        </ul>
-      </div>
-    </section>
+        <section id="conseils" class="card panel reveal">
+          <div class="flow">
+            <h2>Conseils rapides</h2>
+            <div class="tips">
+              <div class="card" style="padding:var(--s-4)"><strong>Priorisez le centre</strong><p class="muted">La colonne centrale ouvre plus de possibilités d’alignement.</p></div>
+              <div class="card" style="padding:var(--s-4)"><strong>Bloquez les “3” adverses</strong><p class="muted">Réagissez vite pour éviter une victoire simple au coup suivant.</p></div>
+              <div class="card" style="padding:var(--s-4)"><strong>Créez des fourches</strong><p class="muted">Deux menaces simultanées forcent des choix difficiles.</p></div>
+              <div class="card" style="padding:var(--s-4)"><strong>Attention à la gravité</strong><p class="muted">Un pion posé bas peut préparer un alignement futur.</p></div>
+            </div>
+          </div>
+        </section>
 
-    <section class="row">
-      <div class="card panel reveal">
-        <h2>FAQ</h2>
-        <details>
-          <summary>Le jeu est-il disponible sur Mac ?</summary>
-          <p>Oui, sur Mac avec puce Apple. Il est aussi disponible sur iPhone, iPad et Vision Pro.</p>
-        </details>
-        <details>
-          <summary>Y a-t-il un mode à deux joueurs ?</summary>
-          <p>Oui, vous pouvez jouer à deux et choisir qui commence.</p>
-        </details>
-        <details>
-          <summary>Quels sont les prérequis ?</summary>
-          <p>iOS/iPadOS 16 minimum. Sur Mac, une puce Apple est requise.</p>
-        </details>
+        <section id="faq" class="card panel reveal">
+          <div class="flow">
+            <h2>FAQ</h2>
+            <details>
+              <summary>Le jeu est-il disponible sur Mac ?</summary>
+              <p>Oui, sur Mac avec puce Apple. Également sur iPhone, iPad et Vision Pro.</p>
+            </details>
+            <details>
+              <summary>Peut-on jouer à deux ?</summary>
+              <p>Oui, un mode 2 joueurs est inclus, avec choix du premier joueur.</p>
+            </details>
+            <details>
+              <summary>Quels sont les prérequis ?</summary>
+              <p>iOS/iPadOS 16 minimum. Sur Mac, une puce Apple est requise.</p>
+            </details>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
   </main>
 
-  <footer class="container center">
+  <footer class="container">
     <small>© <span id="year"></span> Quatre en ligne • <a href="index.html">Accueil</a></small>
   </footer>
 
   <script>
-    // Année + petites révélations au scroll
+    // année
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // révélations au scroll (pour un rendu doux, non intrusif)
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reduce && 'IntersectionObserver' in window){
       const io = new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
       }, {rootMargin:'-10% 0px'});
       document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
     } else {
       document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
     }
 
-    // Transitions de page si supporté
-    document.addEventListener('click', (e)=>{
-      const a = e.target.closest('a');
-      if (!a) return;
-      const url = new URL(a.href, location.href);
-      const sameOrigin = url.origin === location.origin;
-      const isInternal = sameOrigin && !a.target && !a.hash && !a.hasAttribute('download');
-      if (isInternal && document.startViewTransition){
-        e.preventDefault();
-        document.startViewTransition(()=>location.assign(url.href));
-      }
+    // liens ancrés doux + offset sticky
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',e=>{
+        const id=a.getAttribute('href');
+        if(id.length>1){
+          e.preventDefault();
+          document.querySelector(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+        }
+      });
     });
   </script>
 </body>
