@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0ea5e9">
-  <title>Quatre en ligne !</title>
-  <meta name="description" content="Le meilleur jeu de Quatre en ligne !">
-  <meta property="og:title" content="Quatre en ligne !">
-  <meta property="og:description" content="Le meilleur !">
+  <title id="meta-title">Quatre en ligne !</title>
+  <meta id="meta-desc" name="description" content="Le meilleur jeu de Quatre en ligne !">
+  <meta id="og-title" property="og:title" content="Quatre en ligne !">
+  <meta id="og-desc" property="og:description" content="Le meilleur !">
   <meta property="og:type" content="website">
   <meta property="og:image" content="images/hero.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -42,21 +42,31 @@
 
     header{position:sticky;top:0;background:rgba(17,24,39,.72);backdrop-filter:saturate(120%) blur(8px);z-index:40;border-bottom:1px solid rgba(255,255,255,.06);transition:background .3s var(--ease)}
     header.scrolled{background:rgba(17,24,39,.9)}
-    header .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:12px}
+    header .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:12px;gap:.75rem}
     .brand{display:flex;align-items:center;gap:.7rem;font-weight:800}
     .brand a{display:flex;align-items:center;gap:.7rem;color:inherit}
     .logo{inline-size:36px;block-size:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;color:#fff;font-weight:900;box-shadow:0 6px 20px rgba(14,165,233,.45)}
     nav ul{display:flex;gap:.5rem;list-style:none;margin:0;padding:0}
     nav a{display:block;padding:.7rem .85rem;border-radius:10px}
     nav a:hover{background:rgba(255,255,255,.06);text-decoration:none}
+    .controls{display:flex;align-items:center;gap:.5rem}
     .nav-toggle{display:none}
+
+    /* Lang switch button */
+    .lang-btn{display:inline-flex;align-items:center;gap:.45rem;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--fg);padding:.55rem .8rem;border-radius:10px;font-weight:600}
+    .lang-btn:focus{outline:3px solid var(--ring);outline-offset:3px}
+    .lang-code{font-variant:all-small-caps;letter-spacing:.03em}
+
+    /* fixed corner for lang switch */
+    .fixed-corner{position:fixed;top:8px;right:8px;z-index:60;background:rgba(17,24,39,.72);border:1px solid rgba(255,255,255,.18);backdrop-filter:saturate(120%) blur(6px)}
+
     @media (max-width: 760px){
       nav ul{display:none}
       .nav-toggle{display:inline-flex;align-items:center;gap:.5rem;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--fg);padding:.55rem .8rem;border-radius:10px}
       .nav-open nav ul{display:flex;flex-direction:column;gap:.25rem;position:absolute;inset-inline:0;top:64px;background:var(--bg-soft);padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
     }
 
-    /* Hero SIMPLIFIÉ (pas de pseudo-éléments qui débordent) */
+    /* Hero */
     .hero{padding-block:var(--s-7)}
     .hero-inner{max-width:850px;margin-inline:auto;text-align:center}
     .kicker{color:var(--brand-2);font-weight:700;letter-spacing:.25em;text-transform:uppercase;font-size:.8rem}
@@ -91,19 +101,24 @@
   </style>
 </head>
 <body>
-  <a class="sr-only" href="#contenu">Aller au contenu</a>
+  <a id="skip" class="sr-only" href="#contenu">Aller au contenu</a>
   <header>
     <div class="container wrap">
-      <div class="brand"><a href="index.html"><div class="logo">★</div><span>Quatre en ligne</span></a></div>
-      <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu">☰ Menu</button>
+      <div class="brand"><a href="index.html"><div class="logo">★</div><span id="brand">Quatre en ligne</span></a></div>
+      <div class="controls">
+        <button id="langBtn" class="lang-btn fixed-corner" aria-label="Changer la langue" title="Changer la langue">
+          <span aria-hidden="true">🌐</span>
+          <span class="lang-code" id="langCode">EN</span>
+        </button>
+        <button class="nav-toggle" id="menuBtn" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu">☰ Menu</button>
+      </div>
       <nav id="menu" aria-label="Navigation principale">
         <ul>
-          <li><a href="#features">Fonctionnalités</a></li>
-          <li><a href="#apropos">À propos</a></li>
-          <li><a href="#contact">Contact</a></li>
-<li><a href="apprendre.html">Apprendre à jouer</a></li>
-          <li><a href="confidentialite.html">Politique</a></li>
-
+          <li><a id="nav-features" href="#features">Fonctionnalités</a></li>
+          <li><a id="nav-about" href="#apropos">À propos</a></li>
+          <li><a id="nav-contact" href="#contact">Contact</a></li>
+          <li><a id="nav-learn" href="apprendre.html">Apprendre à jouer</a></li>
+          <li><a id="nav-policy" href="confidentialite.html">Politique</a></li>
         </ul>
       </nav>
     </div>
@@ -113,20 +128,20 @@
     <!-- HERO -->
     <section class="hero container">
       <div class="hero-inner">
-        <h1>Quatre en ligne !</h1>
+        <h1 id="hero-h1">Quatre en ligne !</h1>
 
         <!-- Grande image -->
         <div class="hero-picture">
           <picture>
             <source srcset="images/hero.webp" type="image/webp">
-            <img class="hero-img card" src="images/hero.jpg" alt="Aperçu du jeu Quatre en ligne" width="1600" height="900" loading="eager" decoding="async">
+            <img id="hero-img" class="hero-img card" src="images/hero.jpg" alt="Aperçu du jeu Quatre en ligne" width="1600" height="900" loading="eager" decoding="async">
           </picture>
         </div>
 
-        <p class="lead">Le classique, réinventé : thèmes multiples, IA de plusieurs niveaux, et une expérience soignée sur iPhone, iPad, Mac (puce Apple) et Vision Pro.</p>
+        <p class="lead" id="lead">Le classique, réinventé : thèmes multiples, IA de plusieurs niveaux, et une expérience soignée sur iPhone, iPad, Mac (puce Apple) et Vision Pro.</p>
         <div class="cta">
-          <a class="btn" href="https://apps.apple.com/app/quatre-en-ligne/id6751297809" target="_blank" rel="noopener">Télécharger</a>
-          <a class="btn" href="apprendre.html">Apprendre à jouer</a>
+          <a class="btn" id="btn-download" href="https://apps.apple.com/app/quatre-en-ligne/id6751297809" target="_blank" rel="noopener">Télécharger</a>
+          <a class="btn" id="btn-learn" href="apprendre.html">Apprendre à jouer</a>
         </div>
         <div class="badges">
           <span class="badge">iPhone</span><span class="badge">iPad</span><span class="badge">Mac (Apple Silicon)</span><span class="badge">Vision Pro</span>
@@ -136,30 +151,30 @@
 
     <!-- FONCTIONNALITÉS -->
     <section id="features" class="container">
-      <h2 class="reveal">Fonctionnalités</h2>
+      <h2 id="features-title" class="reveal">Fonctionnalités</h2>
       <div class="grid grid-3">
-        <article class="card feature reveal"><h3>Plusieurs thèmes</h3><p class="muted">Choisissez l’ambiance qui vous ressemble pour jouer avec style.</p></article>
-        <article class="card feature reveal"><h3>Plusieurs niveaux</h3><p class="muted">Débutez tranquille, progressez jusqu’aux défis les plus corsés.</p></article>
-        <article class="card feature reveal"><h3>Et plus encore</h3><p class="muted">Mode à deux, choix du premier joueur, et d’autres options pratiques.</p></article>
+        <article class="card feature reveal"><h3 id="f1-title">Plusieurs thèmes</h3><p id="f1-text" class="muted">Choisissez l’ambiance qui vous ressemble pour jouer avec style.</p></article>
+        <article class="card feature reveal"><h3 id="f2-title">Plusieurs niveaux</h3><p id="f2-text" class="muted">Débutez tranquille, progressez jusqu’aux défis les plus corsés.</p></article>
+        <article class="card feature reveal"><h3 id="f3-title">Et plus encore</h3><p id="f3-text" class="muted">Mode à deux, choix du premier joueur, et d’autres options pratiques.</p></article>
       </div>
     </section>
 
     <!-- À PROPOS -->
     <section id="apropos" class="container">
-      <h2 class="reveal">À propos</h2>
+      <h2 id="about-title" class="reveal">À propos</h2>
       <div class="card feature reveal">
-        <p>Quatre en ligne offre une expérience moderne avec une interface claire, plusieurs thèmes, et des niveaux adaptés à tous. Disponible sur iPhone, iPad, Mac (puce Apple) et Vision Pro.</p>
-        <p class="muted">(iOS/iPadOS 16 requis, Mac avec puce Apple requis)</p>
+        <p id="about-p1">Quatre en ligne offre une expérience moderne avec une interface claire, plusieurs thèmes, et des niveaux adaptés à tous. Disponible sur iPhone, iPad, Mac (puce Apple) et Vision Pro.</p>
+        <p id="about-p2" class="muted">(iOS/iPadOS 16 requis, Mac avec puce Apple requis)</p>
       </div>
     </section>
 
     <!-- CONTACT -->
     <section id="contact" class="container">
-      <h2 class="reveal">Contact</h2>
+      <h2 id="contact-title" class="reveal">Contact</h2>
       <div class="grid grid-2">
         <div class="card feature reveal">
-          <h3>Écrivez-nous</h3>
-          <p class="muted">Besoin d’aide ou envie de proposer une idée ?</p>
+          <h3 id="contact-write">Écrivez-nous</h3>
+          <p id="contact-text" class="muted">Besoin d’aide ou envie de proposer une idée ?</p>
           <p><span class="pill">bobcats_triton.0k@icloud.com</span></p>
         </div>
       </div>
@@ -167,27 +182,190 @@
   </main>
 
   <footer class="container" style="text-align:center">
-    <small>© <span id="year"></span> Quatre en ligne • <a href="apprendre.html">Apprendre à jouer</a></small>
+    <small id="footer-text">© <span id="year"></span> Quatre en ligne • <a id="footer-learn" href="apprendre.html">Apprendre à jouer</a></small>
   </footer>
 
   <script>
-    // année
+    // i18n strings
+    const I18N = {
+      fr: {
+        brand: 'Quatre en ligne',
+        langLabel: 'Changer la langue en anglais',
+        navLabel: 'Navigation principale',
+        menuOpen: 'Ouvrir le menu',
+        title: 'Quatre en ligne !',
+        metaDesc: 'Le meilleur jeu de Quatre en ligne !',
+        ogTitle: 'Quatre en ligne !',
+        ogDesc: 'Le meilleur !',
+        h1: 'Quatre en ligne !',
+        lead: 'Le classique, réinventé : thèmes multiples, IA de plusieurs niveaux, et une expérience soignée sur iPhone, iPad, Mac (puce Apple) et Vision Pro.',
+        nav: { features: 'Fonctionnalités', about: 'À propos', contact: 'Contact', learn: 'Apprendre à jouer', policy: 'Politique' },
+        featuresTitle: 'Fonctionnalités',
+        f1: { title: 'Plusieurs thèmes', text: 'Choisissez l’ambiance qui vous ressemble pour jouer avec style.' },
+        f2: { title: 'Plusieurs niveaux', text: 'Débutez tranquille, progressez jusqu’aux défis les plus corsés.' },
+        f3: { title: 'Et plus encore', text: 'Mode à deux, choix du premier joueur, et d’autres options pratiques.' },
+        aboutTitle: 'À propos',
+        aboutP1: 'Quatre en ligne offre une expérience moderne avec une interface claire, plusieurs thèmes, et des niveaux adaptés à tous. Disponible sur iPhone, iPad, Mac (puce Apple) et Vision Pro.',
+        aboutP2: '(iOS/iPadOS 16 requis, Mac avec puce Apple requis)',
+        contactTitle: 'Contact',
+        contactH3: 'Écrivez-nous',
+        contactP: 'Besoin d’aide ou envie de proposer une idée ?',
+        footerLearn: 'Apprendre à jouer',
+        heroAlt: 'Aperçu du jeu Quatre en ligne',
+        skip: 'Aller au contenu'
+      },
+      en: {
+        brand: 'Four in a row',
+        langLabel: 'Switch language to French',
+        navLabel: 'Main navigation',
+        menuOpen: 'Open menu',
+        title: 'Four in a row!',
+        metaDesc: 'The best Four in a row game!',
+        ogTitle: 'Four in a row!',
+        ogDesc: 'The very best!',
+        h1: 'Four in a row!',
+        lead: 'The classic, reinvented: multiple themes, multi‑level AI, and a polished experience on iPhone, iPad, Mac (Apple silicon) and Vision Pro.',
+        nav: { features: 'Features', about: 'About', contact: 'Contact', learn: 'How to Play', policy: 'Privacy Policy' },
+        featuresTitle: 'Features',
+        f1: { title: 'Multiple themes', text: 'Pick the vibe that suits your style.' },
+        f2: { title: 'Multiple levels', text: 'Start easy and climb to tougher challenges.' },
+        f3: { title: 'And more', text: 'Two‑player mode, choose who starts, and more handy options.' },
+        aboutTitle: 'About',
+        aboutP1: 'Quatre en ligne offers a modern experience with a clear interface, multiple themes, and levels for everyone. Available on iPhone, iPad, Mac (Apple silicon) and Vision Pro.',
+        aboutP2: '(Requires iOS/iPadOS 16, Mac with Apple silicon)',
+        contactTitle: 'Contact',
+        contactH3: 'Write to us',
+        contactP: 'Need help or want to suggest an idea?',
+        footerLearn: 'How to Play',
+        heroAlt: 'Preview of the Four in a row game',
+        skip: 'Skip to content'
+      }
+    };
+
+    // Persisted/system language
+    const getSystemLang = () => {
+      const prefs = navigator.languages || [navigator.language];
+      for (const l of prefs) {
+        const code = (l||'').toLowerCase();
+        if (code.startsWith('fr')) return 'fr';
+        if (code.startsWith('en')) return 'en';
+      }
+      return 'fr';
+    };
+    const stored = localStorage.getItem('lang');
+    let currentLang = stored || getSystemLang();
+
+    function setLang(lang){
+      currentLang = (lang === 'en') ? 'en' : 'fr';
+      localStorage.setItem('lang', currentLang);
+      const t = I18N[currentLang];
+
+      // <html lang>
+      document.documentElement.setAttribute('lang', currentLang);
+
+      // Skip link
+      document.getElementById('skip').textContent = t.skip;
+
+      // Meta + title
+      document.getElementById('meta-title').textContent = t.title;
+      document.getElementById('meta-desc').setAttribute('content', t.metaDesc);
+      document.getElementById('og-title').setAttribute('content', t.ogTitle);
+      document.getElementById('og-desc').setAttribute('content', t.ogDesc);
+
+      // Header / nav labels
+      document.getElementById('menu').setAttribute('aria-label', t.navLabel);
+      document.getElementById('menuBtn').setAttribute('aria-label', t.menuOpen);
+      document.getElementById('brand').textContent = t.brand;
+      document.getElementById('nav-features').textContent = t.nav.features;
+      document.getElementById('nav-about').textContent = t.nav.about;
+      document.getElementById('nav-contact').textContent = t.nav.contact;
+      document.getElementById('nav-learn').textContent = t.nav.learn;
+      document.getElementById('nav-policy').textContent = t.nav.policy;
+
+      // Hero
+      document.getElementById('hero-h1').textContent = t.h1;
+      document.getElementById('lead').textContent = t.lead;
+      document.getElementById('hero-img').setAttribute('alt', t.heroAlt);
+      document.getElementById('btn-download').textContent = currentLang === 'fr' ? 'Télécharger' : 'Download';
+      document.getElementById('btn-learn').textContent = t.nav.learn;
+
+      // Sections
+      document.getElementById('features-title').textContent = t.featuresTitle;
+      document.getElementById('f1-title').textContent = t.f1.title;
+      document.getElementById('f1-text').textContent = t.f1.text;
+      document.getElementById('f2-title').textContent = t.f2.title;
+      document.getElementById('f2-text').textContent = t.f2.text;
+      document.getElementById('f3-title').textContent = t.f3.title;
+      document.getElementById('f3-text').textContent = t.f3.text;
+
+      document.getElementById('about-title').textContent = t.aboutTitle;
+      document.getElementById('about-p1').textContent = t.aboutP1;
+      document.getElementById('about-p2').textContent = t.aboutP2;
+
+      document.getElementById('contact-title').textContent = t.contactTitle;
+      document.getElementById('contact-write').textContent = t.contactH3;
+      document.getElementById('contact-text').textContent = t.contactP;
+
+      // Footer (year stays)
+      document.getElementById('footer-learn').textContent = t.footerLearn;
+      updateFooterYear();
+
+      // Language button shows the *other* language code (what you'll switch to)
+      const nextCode = currentLang === 'fr' ? 'EN' : 'FR';
+      const btn = document.getElementById('langBtn');
+      document.getElementById('langCode').textContent = nextCode;
+      btn.setAttribute('aria-label', t.langLabel);
+      btn.setAttribute('title', t.langLabel);
+    }
+
+    function updateFooterYear(){
+      const ySpan = document.getElementById('year');
+      if (!ySpan.textContent) ySpan.textContent = new Date().getFullYear();
+      // Keep surrounding label in the right language
+      const small = document.getElementById('footer-text');
+      const brand = I18N[currentLang].brand;
+      const t = I18N[currentLang];
+      small.firstChild && small.removeChild(small.firstChild); // clear before year span
+      small.insertBefore(document.createTextNode(`© `), small.firstChild);
+      // After the year span, ensure brand text + dot + link label
+      const afterYear = ` ${brand} • `;
+      const rest = document.createTextNode(afterYear);
+      const footer = document.getElementById('footer-text');
+      // Replace text node following the year span
+      const yearNode = document.getElementById('year');
+      if (yearNode && yearNode.nextSibling) {
+        footer.replaceChild(rest, yearNode.nextSibling);
+      } else if (yearNode) {
+        footer.appendChild(rest);
+      }
+    }
+
+    // Year autopopulate
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // header sticky + menu mobile
     const header = document.querySelector('header');
     addEventListener('scroll', ()=> header.classList.toggle('scrolled', scrollY>8), {passive:true});
-    const toggle = document.querySelector('.nav-toggle');
+
+    const toggle = document.getElementById('menuBtn');
     toggle?.addEventListener('click', () => {
       const open = header.classList.toggle('nav-open');
       toggle.setAttribute('aria-expanded', String(open));
+    });
+
+    // language toggle
+    document.getElementById('langBtn')?.addEventListener('click', ()=>{
+      setLang(currentLang === 'fr' ? 'en' : 'fr');
+      // Close mobile menu if open
+      header.classList.remove('nav-open');
+      toggle?.setAttribute('aria-expanded','false');
     });
 
     // ancrages doux + fermeture menu
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click',e=>{
         const id=a.getAttribute('href');
-        if(id.length>1){
+        if(id && id.length>1){
           e.preventDefault();
           document.querySelector(id)?.scrollIntoView({behavior:'smooth',block:'start'});
           header.classList.remove('nav-open');
@@ -224,6 +402,42 @@
         setTimeout(()=>span.remove(), 600);
       });
     });
+
+    // Initialize language (respect stored preference first, then system)
+    setLang(currentLang);
+
+    // --- Minimal runtime tests (enable by adding ?tests=true or #tests to URL) ---
+    function runI18nTests(){
+      const original = currentLang;
+      console.group('[i18n tests]');
+      try {
+        console.assert(I18N.fr.brand === 'Quatre en ligne', 'FR brand should be "Quatre en ligne"');
+        console.assert(I18N.en.brand === 'Four in a row', 'EN brand should be "Four in a row"');
+
+        setLang('en');
+        console.assert(document.documentElement.lang === 'en', 'html lang should be en');
+        console.assert(document.getElementById('brand').textContent === 'Four in a row', 'Brand text EN');
+        console.assert(document.getElementById('btn-download').textContent === 'Download', 'Download label EN');
+        console.assert(document.getElementById('meta-title').textContent === 'Four in a row!', 'Title EN');
+
+        setLang('fr');
+        console.assert(document.documentElement.lang === 'fr', 'html lang should be fr');
+        console.assert(document.getElementById('brand').textContent === 'Quatre en ligne', 'Brand text FR');
+        console.assert(document.getElementById('btn-download').textContent === 'Télécharger', 'Download label FR');
+        console.assert(document.getElementById('meta-title').textContent === 'Quatre en ligne !', 'Title FR');
+
+        console.log('All assertions passed ✅');
+      } catch (err){
+        console.error('Tests failed:', err);
+      } finally {
+        setLang(original);
+        console.groupEnd();
+      }
+    }
+
+    if (location.search.includes('tests=true') || location.hash.includes('tests')){
+      (window.requestIdleCallback || window.requestAnimationFrame)(runI18nTests);
+    }
   </script>
 </body>
 </html>
