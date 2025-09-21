@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0ea5e9">
-  <title>Apprendre à jouer – Quatre en ligne</title>
-  <meta name="description" content="Règles simples, conseils et schémas pour maîtriser Quatre en ligne.">
+  <title id="meta-title">Apprendre à jouer – Quatre en ligne</title>
+  <meta id="meta-desc" name="description" content="Règles simples, conseils et schémas pour maîtriser Quatre en ligne.">
   <style>
     :root{
       --bg:#0b1220; --bg-soft:#111827; --fg:#e5e7eb; --fg-dim:#bcc1cd;
@@ -14,7 +14,7 @@
       --maxw:1100px; --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.25);
       --s-1:8px; --s-2:12px; --s-3:16px; --s-4:24px; --s-5:32px; --s-6:48px; --s-7:64px;
       --ease:cubic-bezier(.2,.7,.2,1);
-      --header-h: 64px; /* hauteur header */
+      --header-h: 64px;
     }
     @media (prefers-color-scheme: light){
       :root{--bg:#f8fafc;--bg-soft:#fff;--fg:#0b1220;--fg-dim:#475569;--ring:rgba(14,165,233,.25)}
@@ -35,6 +35,12 @@
     .logo{inline-size:36px;block-size:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;color:#fff;font-weight:900}
     nav ul{display:flex;gap:.5rem;list-style:none;margin:0;padding:0;flex-wrap:wrap}
     nav a{display:block;padding:.7rem .85rem;border-radius:10px}
+
+    /* Lang switch button (fixed top-right) */
+    .lang-btn{display:inline-flex;align-items:center;gap:.45rem;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--fg);padding:.55rem .8rem;border-radius:10px;font-weight:600}
+    .lang-btn:focus{outline:3px solid var(--ring);outline-offset:3px}
+    .lang-code{font-variant:all-small-caps;letter-spacing:.03em}
+    .fixed-corner{position:fixed;top:8px;right:8px;z-index:60;background:rgba(17,24,39,.72);border:1px solid rgba(255,255,255,.18);backdrop-filter:saturate(120%) blur(6px)}
 
     .card{background:var(--bg-soft);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.06)}
     h1{font-size:clamp(1.8rem,4vw,2.6rem);margin:0}
@@ -80,40 +86,48 @@
     @media (prefers-reduced-motion: reduce){.reveal{opacity:1;transform:none}}
     .reveal{opacity:0;transform:translateY(12px);transition:opacity .5s var(--ease), transform .5s var(--ease)}
     .reveal.in{opacity:1;transform:none}
+
+    /* a11y */
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   </style>
 </head>
 <body>
+  <a id="skip" class="sr-only" href="#contenu">Aller au contenu</a>
   <header>
     <div class="container wrap">
-      <div class="brand"><a href="index.html"><div class="logo">★</div><span>Quatre en ligne</span></a></div>
-      <nav aria-label="Navigation principale">
+      <div class="brand"><a href="index.html"><div class="logo">★</div><span id="brand">Quatre en ligne</span></a></div>
+      <nav id="mainnav" aria-label="Navigation principale">
         <ul>
-<li>
-  <a href="index.html" 
-     style="display:inline-block; padding:10px 20px; 
-            background:#1e1e1e; color:white; 
-            text-decoration:none; border-radius:8px; 
-            transition:0.3s ease;">
-    Accueil
-  </a>
-</li>
+          <li>
+            <a id="home-link" href="index.html" 
+               style="display:inline-block; padding:10px 20px; 
+                      background:#1e1e1e; color:white; 
+                      text-decoration:none; border-radius:8px; 
+                      transition:0.3s ease;">
+              Accueil
+            </a>
+          </li>
         </ul>
       </nav>
+      <button id="langBtn" class="lang-btn fixed-corner" aria-label="Changer la langue" title="Changer la langue">
+        <span aria-hidden="true">🌐</span>
+        <span class="lang-code" id="langCode">EN</span>
+      </button>
     </div>
   </header>
 
   <main id="contenu" class="container" style="padding-block:var(--s-6)">
     <div class="layout">
-      <!-- SOMMAIRE -->
+      <!-- SOMMAIRE / TOC -->
       <aside class="toc">
         <div class="box card" style="padding:var(--s-4)">
-          <strong>Sommaire</strong>
-          <small class="muted" style="display:block;margin-top:.25rem">Tout ce qu’il faut, d’un coup d’œil</small>
+          <strong id="toc-title">Sommaire</strong>
+          <small id="toc-sub" class="muted" style="display:block;margin-top:.25rem">Tout ce qu’il faut, d’un coup d’œil</small>
           <ol style="margin-top:var(--s-3)">
-            <li><a href="#regles">Règles rapides</a></li>
-            <li><a href="#schema">Schémas d’alignements</a></li>
-            <li><a href="#conseils">Conseils</a></li>
-            <li><a href="#faq">FAQ</a></li>
+            <li><a id="toc-rules" href="#regles">Règles rapides</a></li>
+            <li><a id="toc-diagrams" href="#schema">Schémas d’alignements</a></li>
+            <li><a id="toc-tips" href="#conseils">Conseils</a></li>
+            <li><a id="toc-faq" href="#faq">FAQ</a></li>
           </ol>
         </div>
       </aside>
@@ -122,15 +136,15 @@
       <div class="content flow" style="--flow: var(--s-6)">
         <section class="card panel reveal">
           <div class="flow">
-            <h1>Apprendre à jouer</h1>
-            <p class="muted">L’objectif : aligner 4 pions de votre couleur (horizontal, vertical ou diagonal) avant votre adversaire.</p>
+            <h1 id="h1">Apprendre à jouer</h1>
+            <p id="intro" class="muted">L’objectif : aligner 4 pions de votre couleur (horizontal, vertical ou diagonal) avant votre adversaire.</p>
           </div>
         </section>
 
         <section id="regles" class="card panel reveal">
           <div class="flow">
-            <h2>Règles rapides</h2>
-            <ol>
+            <h2 id="rules-h2">Règles rapides</h2>
+            <ol id="rules-list">
               <li>Jouez à tour de rôle et <strong>lâchez un pion</strong> dans l’une des 7 colonnes.</li>
               <li>Le pion tombe jusqu’à la <strong>première case libre</strong> de la colonne.</li>
               <li><strong>4 alignés</strong> (horizontal, vertical ou diagonal) = victoire.</li>
@@ -141,9 +155,8 @@
 
         <section id="schema" class="card panel reveal">
           <div class="flow">
-            <h2>Schémas d’alignements</h2>
-            <!-- schéma clair (lignes au lieu de rectangles) -->
-            <svg class="diagram" viewBox="0 0 700 520" role="img" aria-label="Plateau 7 colonnes par 6 rangées avec exemples d’alignements gagnants">
+            <h2 id="diagrams-h2">Schémas d’alignements</h2>
+            <svg id="board-diagram" class="diagram" viewBox="0 0 700 520" role="img" aria-label="Plateau 7 colonnes par 6 rangées avec exemples d’alignements gagnants">
               <defs>
                 <radialGradient id="hole" cx="30%" cy="30%"><stop offset="0%" stop-color="#ffffff22"/><stop offset="70%" stop-color="#00000066"/></radialGradient>
                 <radialGradient id="red"><stop offset="0%" stop-color="#fecaca"/><stop offset="70%" stop-color="#ef4444"/></radialGradient>
@@ -152,7 +165,6 @@
               <rect x="0" y="0" width="700" height="520" rx="22" fill="#0f172a"/>
               <!-- trous -->
               <g fill="url(#hole)">
-                <!-- y: 60,140,220,300,380,460  |  x: 55,150,245,340,435,530,625 -->
                 <g><circle cx="55" cy="60" r="32"/><circle cx="150" cy="60" r="32"/><circle cx="245" cy="60" r="32"/><circle cx="340" cy="60" r="32"/><circle cx="435" cy="60" r="32"/><circle cx="530" cy="60" r="32"/><circle cx="625" cy="60" r="32"/></g>
                 <g><circle cx="55" cy="140" r="32"/><circle cx="150" cy="140" r="32"/><circle cx="245" cy="140" r="32"/><circle cx="340" cy="140" r="32"/><circle cx="435" cy="140" r="32"/><circle cx="530" cy="140" r="32"/><circle cx="625" cy="140" r="32"/></g>
                 <g><circle cx="55" cy="220" r="32"/><circle cx="150" cy="220" r="32"/><circle cx="245" cy="220" r="32"/><circle cx="340" cy="220" r="32"/><circle cx="435" cy="220" r="32"/><circle cx="530" cy="220" r="32"/><circle cx="625" cy="220" r="32"/></g>
@@ -168,60 +180,55 @@
                 <circle cx="245" cy="460" r="32" fill="url(#red)"/>
                 <circle cx="340" cy="460" r="32" fill="url(#red)"/>
                 <circle cx="435" cy="460" r="32" fill="url(#red)"/>
-                <!-- LIGNE (remplace le rectangle) -->
                 <path d="M150 460 L435 460" fill="none" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>
               </g>
-
               <!-- vertical jaune -->
               <g>
                 <circle cx="625" cy="380" r="32" fill="url(#yellow)"/>
                 <circle cx="625" cy="300" r="32" fill="url(#yellow)"/>
                 <circle cx="625" cy="220" r="32" fill="url(#yellow)"/>
                 <circle cx="625" cy="140" r="32" fill="url(#yellow)"/>
-                <!-- LIGNE verticale -->
                 <path d="M625 140 L625 380" fill="none" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>
               </g>
-
               <!-- diagonal rouge -->
               <g>
                 <circle cx="55"  cy="300" r="32" fill="url(#red)"/>
                 <circle cx="150" cy="220" r="32" fill="url(#red)"/>
                 <circle cx="245" cy="140" r="32" fill="url(#red)"/>
                 <circle cx="340" cy="60"  r="32" fill="url(#red)"/>
-                <!-- LIGNE diagonale (déjà une ligne) -->
                 <path d="M55 300 L340 60" fill="none" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>
               </g>
             </svg>
-            <p class="legend">Exemples d’alignements gagnants (traits verts).</p>
+            <p id="legend" class="legend">Exemples d’alignements gagnants (traits verts).</p>
           </div>
         </section>
 
         <section id="conseils" class="card panel reveal">
           <div class="flow">
-            <h2>Conseils rapides</h2>
+            <h2 id="tips-h2">Conseils rapides</h2>
             <div class="tips">
-              <div class="card" style="padding:var(--s-4)"><strong>Priorisez le centre</strong><p class="muted">La colonne centrale ouvre plus de possibilités d’alignement.</p></div>
-              <div class="card" style="padding:var(--s-4)"><strong>Bloquez les “3” adverses</strong><p class="muted">Réagissez vite pour éviter une victoire simple au coup suivant.</p></div>
-              <div class="card" style="padding:var(--s-4)"><strong>Créez des fourches</strong><p class="muted">Deux menaces simultanées forcent des choix difficiles.</p></div>
-              <div class="card" style="padding:var(--s-4)"><strong>Attention à la gravité</strong><p class="muted">Un pion posé bas peut préparer un alignement futur.</p></div>
+              <div class="card" style="padding:var(--s-4)"><strong id="tip1-title">Priorisez le centre</strong><p id="tip1-text" class="muted">La colonne centrale ouvre plus de possibilités d’alignement.</p></div>
+              <div class="card" style="padding:var(--s-4)"><strong id="tip2-title">Bloquez les “3” adverses</strong><p id="tip2-text" class="muted">Réagissez vite pour éviter une victoire simple au coup suivant.</p></div>
+              <div class="card" style="padding:var(--s-4)"><strong id="tip3-title">Créez des fourches</strong><p id="tip3-text" class="muted">Deux menaces simultanées forcent des choix difficiles.</p></div>
+              <div class="card" style="padding:var(--s-4)"><strong id="tip4-title">Attention à la gravité</strong><p id="tip4-text" class="muted">Un pion posé bas peut préparer un alignement futur.</p></div>
             </div>
           </div>
         </section>
 
         <section id="faq" class="card panel reveal">
           <div class="flow">
-            <h2>FAQ</h2>
+            <h2 id="faq-h2">FAQ</h2>
             <details>
-              <summary>Le jeu est-il disponible sur Mac ?</summary>
-              <p>Oui, sur Mac avec puce Apple. Également sur iPhone, iPad et Vision Pro.</p>
+              <summary id="faq1-q">Le jeu est-il disponible sur Mac ?</summary>
+              <p id="faq1-a">Oui, sur Mac avec puce Apple. Également sur iPhone, iPad et Vision Pro.</p>
             </details>
             <details>
-              <summary>Peut-on jouer à deux ?</summary>
-              <p>Oui, un mode 2 joueurs est inclus, avec choix du premier joueur.</p>
+              <summary id="faq2-q">Peut-on jouer à deux ?</summary>
+              <p id="faq2-a">Oui, un mode 2 joueurs est inclus, avec choix du premier joueur.</p>
             </details>
             <details>
-              <summary>Quels sont les prérequis ?</summary>
-              <p>iOS/iPadOS 16 minimum. Sur Mac, une puce Apple est requise.</p>
+              <summary id="faq3-q">Quels sont les prérequis ?</summary>
+              <p id="faq3-a">iOS/iPadOS 16 minimum. Sur Mac, une puce Apple est requise.</p>
             </details>
           </div>
         </section>
@@ -230,12 +237,204 @@
   </main>
 
   <footer class="container">
-    <small>© <span id="year"></span> Quatre en ligne • <a href="index.html">Accueil</a></small>
+    <small>© <span id="year"></span> <span id="brand-footer">Quatre en ligne</span> • <a id="footer-home" href="index.html">Accueil</a></small>
   </footer>
 
   <script>
-    // année
+    // i18n strings for this page
+    const I18N = {
+      fr: {
+        brand: 'Quatre en ligne',
+        title: 'Apprendre à jouer – Quatre en ligne',
+        desc: 'Règles simples, conseils et schémas pour maîtriser Quatre en ligne.',
+        navLabel: 'Navigation principale',
+        home: 'Accueil',
+        switchLabel: 'Changer la langue en anglais',
+        skip: 'Aller au contenu',
+        h1: 'Apprendre à jouer',
+        intro: "L’objectif : aligner 4 pions de votre couleur (horizontal, vertical ou diagonal) avant votre adversaire.",
+        tocTitle: 'Sommaire',
+        tocSub: 'Tout ce qu’il faut, d’un coup d’œil',
+        tocRules: 'Règles rapides',
+        tocDiagrams: 'Schémas d’alignements',
+        tocTips: 'Conseils',
+        tocFAQ: 'FAQ',
+        rulesH2: 'Règles rapides',
+        rulesList: [
+          'Jouez à tour de rôle et <strong>lâchez un pion</strong> dans l’une des 7 colonnes.',
+          'Le pion tombe jusqu’à la <strong>première case libre</strong> de la colonne.',
+          '<strong>4 alignés</strong> (horizontal, vertical ou diagonal) = victoire.',
+          'Grille pleine sans gagnant : <strong>match nul</strong>.'
+        ],
+        diagramsH2: 'Schémas d’alignements',
+        diagramAria: 'Plateau 7 colonnes par 6 rangées avec exemples d’alignements gagnants',
+        legend: 'Exemples d’alignements gagnants (traits verts).',
+        tipsH2: 'Conseils rapides',
+        tips: [
+          {title: 'Priorisez le centre', text: 'La colonne centrale ouvre plus de possibilités d’alignement.'},
+          {title: 'Bloquez les “3” adverses', text: 'Réagissez vite pour éviter une victoire simple au coup suivant.'},
+          {title: 'Créez des fourches', text: 'Deux menaces simultanées forcent des choix difficiles.'},
+          {title: 'Attention à la gravité', text: 'Un pion posé bas peut préparer un alignement futur.'}
+        ],
+        faqH2: 'FAQ',
+        faq: [
+          {q: 'Le jeu est-il disponible sur Mac ?', a: 'Oui, sur Mac avec puce Apple. Également sur iPhone, iPad et Vision Pro.'},
+          {q: 'Peut-on jouer à deux ?', a: 'Oui, un mode 2 joueurs est inclus, avec choix du premier joueur.'},
+          {q: 'Quels sont les prérequis ?', a: 'iOS/iPadOS 16 minimum. Sur Mac, une puce Apple est requise.'}
+        ]
+      },
+      en: {
+        brand: 'Four in a row',
+        title: 'How to Play – Four in a row',
+        desc: 'Simple rules, tips, and diagrams to master Four in a row.',
+        navLabel: 'Main navigation',
+        home: 'Home',
+        switchLabel: 'Switch language to French',
+        skip: 'Skip to content',
+        h1: 'How to Play',
+        intro: 'The goal: connect 4 of your pieces (horizontal, vertical, or diagonal) before your opponent.',
+        tocTitle: 'Summary',
+        tocSub: 'Everything you need at a glance',
+        tocRules: 'Quick Rules',
+        tocDiagrams: 'Alignment diagrams',
+        tocTips: 'Tips',
+        tocFAQ: 'FAQ',
+        rulesH2: 'Quick Rules',
+        rulesList: [
+          'Take turns and <strong>drop a piece</strong> into any of the 7 columns.',
+          'The piece falls to the <strong>first empty cell</strong> in that column.',
+          '<strong>4 in a line</strong> (horizontal, vertical, or diagonal) = win.',
+          'Full board with no winner: <strong>draw</strong>.'
+        ],
+        diagramsH2: 'Alignment diagrams',
+        diagramAria: 'Board 7 columns by 6 rows with examples of winning alignments',
+        legend: 'Examples of winning alignments (green lines).',
+        tipsH2: 'Quick Tips',
+        tips: [
+          {title: 'Prioritize the center', text: 'The center column opens more alignment possibilities.'},
+          {title: 'Block opponent “threes”', text: 'Respond quickly to prevent an easy next‑move win.'},
+          {title: 'Create forks', text: 'Two simultaneous threats force tough choices.'},
+          {title: 'Mind gravity', text: 'Lower pieces can set up future alignments.'}
+        ],
+        faqH2: 'FAQ',
+        faq: [
+          {q: 'Is the game available on Mac?', a: 'Yes, on Macs with Apple silicon. Also on iPhone, iPad, and Vision Pro.'},
+          {q: 'Can two people play?', a: 'Yes, there is a 2‑player mode with a choice of who starts.'},
+          {q: 'What are the requirements?', a: 'iOS/iPadOS 16 minimum. On Mac, Apple silicon is required.'}
+        ]
+      }
+    };
+
+    // helpers
+    const getSystemLang = () => {
+      const prefs = navigator.languages || [navigator.language];
+      for (const l of prefs) {
+        const code = (l||'').toLowerCase();
+        if (code.startsWith('fr')) return 'fr';
+        if (code.startsWith('en')) return 'en';
+      }
+      return 'fr';
+    };
+    const readStoredLang = () => { try { return localStorage.getItem('lang'); } catch { return null; } };
+
+    // elements
+    const brand = document.getElementById('brand');
+    const brandFooter = document.getElementById('brand-footer');
+    const homeLink = document.getElementById('home-link');
+    const footerHome = document.getElementById('footer-home');
+    const mainnav = document.getElementById('mainnav');
+    const langBtn = document.getElementById('langBtn');
+
+    // content ids
+    const H = {
+      h1: document.getElementById('h1'),
+      intro: document.getElementById('intro'),
+      tocTitle: document.getElementById('toc-title'),
+      tocSub: document.getElementById('toc-sub'),
+      tocRules: document.getElementById('toc-rules'),
+      tocDiagrams: document.getElementById('toc-diagrams'),
+      tocTips: document.getElementById('toc-tips'),
+      tocFAQ: document.getElementById('toc-faq'),
+      rulesH2: document.getElementById('rules-h2'),
+      rulesList: document.getElementById('rules-list'),
+      diagramsH2: document.getElementById('diagrams-h2'),
+      diagram: document.getElementById('board-diagram'),
+      legend: document.getElementById('legend'),
+      tipsH2: document.getElementById('tips-h2'),
+      tip1t: document.getElementById('tip1-title'), tip1x: document.getElementById('tip1-text'),
+      tip2t: document.getElementById('tip2-title'), tip2x: document.getElementById('tip2-text'),
+      tip3t: document.getElementById('tip3-title'), tip3x: document.getElementById('tip3-text'),
+      tip4t: document.getElementById('tip4-title'), tip4x: document.getElementById('tip4-text'),
+      faqH2: document.getElementById('faq-h2'),
+      faq1q: document.getElementById('faq1-q'), faq1a: document.getElementById('faq1-a'),
+      faq2q: document.getElementById('faq2-q'), faq2a: document.getElementById('faq2-a'),
+      faq3q: document.getElementById('faq3-q'), faq3a: document.getElementById('faq3-a'),
+    };
+
+    // year
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    let currentLang = readStoredLang() || getSystemLang();
+
+    function setLang(lang){
+      currentLang = (lang === 'en') ? 'en' : 'fr';
+      try { localStorage.setItem('lang', currentLang); } catch {}
+      const t = I18N[currentLang];
+
+      // html lang
+      document.documentElement.setAttribute('lang', currentLang);
+
+      // head
+      document.getElementById('meta-title').textContent = t.title;
+      document.getElementById('meta-desc').setAttribute('content', t.desc);
+
+      // header + footer + nav
+      brand.textContent = t.brand;
+      document.getElementById('brand-footer').textContent = t.brand;
+      homeLink.textContent = t.home;
+      footerHome.textContent = t.home;
+      mainnav.setAttribute('aria-label', t.navLabel);
+
+      // button shows next code
+      document.getElementById('langCode').textContent = currentLang === 'fr' ? 'EN' : 'FR';
+      langBtn.setAttribute('aria-label', t.switchLabel);
+      langBtn.setAttribute('title', t.switchLabel);
+
+      // hero section
+      H.h1.textContent = t.h1;
+      H.intro.textContent = t.intro;
+
+      // toc
+      H.tocTitle.textContent = t.tocTitle;
+      H.tocSub.textContent = t.tocSub;
+      H.tocRules.textContent = t.tocRules;
+      H.tocDiagrams.textContent = t.tocDiagrams;
+      H.tocTips.textContent = t.tocTips;
+      H.tocFAQ.textContent = t.tocFAQ;
+
+      // rules
+      H.rulesH2.textContent = t.rulesH2;
+      H.rulesList.innerHTML = t.rulesList.map(li=>`<li>${li}</li>`).join('');
+
+      // diagrams
+      H.diagramsH2.textContent = t.diagramsH2;
+      H.diagram.setAttribute('aria-label', t.diagramAria);
+      H.legend.textContent = t.legend;
+
+      // tips
+      H.tipsH2.textContent = t.tipsH2;
+      [H.tip1t,H.tip2t,H.tip3t,H.tip4t].forEach((el,i)=> el.textContent = t.tips[i].title);
+      [H.tip1x,H.tip2x,H.tip3x,H.tip4x].forEach((el,i)=> el.textContent = t.tips[i].text);
+
+      // faq
+      H.faqH2.textContent = t.faqH2;
+      [H.faq1q,H.faq2q,H.faq3q].forEach((el,i)=> el.textContent = t.faq[i].q);
+      [H.faq1a,H.faq2a,H.faq3a].forEach((el,i)=> el.textContent = t.faq[i].a);
+    }
+
+    // init + button
+    setLang(currentLang);
+    document.getElementById('langBtn').addEventListener('click', ()=> setLang(currentLang === 'fr' ? 'en' : 'fr'));
 
     // révélations au scroll
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -252,12 +451,51 @@
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click',e=>{
         const id=a.getAttribute('href');
-        if(id.length>1){
+        if(id && id.length>1){
           e.preventDefault();
           document.querySelector(id)?.scrollIntoView({behavior:'smooth',block:'start'});
         }
       });
     });
+
+    // Skip link i18n
+    document.getElementById('skip').textContent = I18N[currentLang].skip;
+
+    // --- Minimal runtime tests (add ?tests=true or #tests) ---
+    function runTests(){
+      const orig = currentLang;
+      console.group('[learn i18n tests]');
+      try{
+        // brand
+        setLang('en');
+        console.assert(document.documentElement.lang === 'en', 'html lang en');
+        console.assert(brand.textContent === 'Four in a row', 'brand header EN');
+        console.assert(document.getElementById('brand-footer').textContent === 'Four in a row', 'brand footer EN');
+        console.assert(document.getElementById('meta-title').textContent.includes('How to Play'), 'title EN');
+        console.assert(document.getElementById('home-link').textContent === 'Home', 'home link EN');
+        console.assert(H.rulesH2.textContent === 'Quick Rules', 'rules h2 EN');
+        console.assert(H.diagram.getAttribute('aria-label').toLowerCase().includes('7 columns'), 'diagram aria EN');
+
+        setLang('fr');
+        console.assert(document.documentElement.lang === 'fr', 'html lang fr');
+        console.assert(brand.textContent === 'Quatre en ligne', 'brand header FR');
+        console.assert(document.getElementById('brand-footer').textContent === 'Quatre en ligne', 'brand footer FR');
+        console.assert(document.getElementById('meta-title').textContent.includes('Apprendre'), 'title FR');
+        console.assert(document.getElementById('home-link').textContent === 'Accueil', 'home link FR');
+        console.assert(H.rulesH2.textContent === 'Règles rapides', 'rules h2 FR');
+        console.assert(H.diagram.getAttribute('aria-label').toLowerCase().includes('colonnes'), 'diagram aria FR');
+
+        console.log('All tests passed ✅');
+      }catch(e){
+        console.error('Tests failed:', e);
+      } finally {
+        setLang(orig);
+        console.groupEnd();
+      }
+    }
+    if (location.search.includes('tests=true') || location.hash.includes('tests')){
+      (window.requestIdleCallback || window.requestAnimationFrame)(runTests);
+    }
   </script>
 </body>
 </html>
