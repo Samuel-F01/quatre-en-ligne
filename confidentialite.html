@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#0ea5e9">
-  <title>Politique de confidentialité – Quatre en ligne</title>
-  <meta name="description" content="Politique de confidentialité de l’app Quatre en ligne (FR/EN).">
+  <title id="meta-title">Politique de confidentialité – Quatre en ligne</title>
+  <meta id="meta-desc" name="description" content="Politique de confidentialité de l’app Quatre en ligne (FR/EN).">
   <style>
     :root{
       --bg:#0b1220; --bg-soft:#111827; --fg:#e5e7eb; --fg-dim:#bcc1cd;
@@ -28,16 +28,18 @@
     h1{font-size:clamp(1.8rem,4vw,2.4rem);margin:0}
     h2{font-size:clamp(1.2rem,3vw,1.6rem);margin:0}
 
-    /* Header simplifié (opaque, non-sticky) */
+    /* Header simplifié */
     header{background:var(--bg-soft);border-bottom:1px solid rgba(255,255,255,.08)}
     header .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:12px}
     .brand{display:flex;align-items:center;gap:.7rem;font-weight:800}
     .brand a{display:flex;align-items:center;gap:.7rem;color:inherit}
     .logo{inline-size:36px;block-size:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;color:#fff;font-weight:900}
-    .seg{display:inline-flex;border:1px solid rgba(255,255,255,.12);border-radius:999px;overflow:hidden}
-    .seg button{background:transparent;color:var(--fg);border:0;padding:.45rem .8rem;cursor:pointer}
-    .seg button[aria-current="true"]{background:rgba(255,255,255,.08)}
-    .lang{display:flex;gap:.4rem;align-items:center}
+
+    /* Bouton langue (fixé coin haut droite) */
+    .lang-btn{display:inline-flex;align-items:center;gap:.45rem;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--fg);padding:.55rem .8rem;border-radius:10px;font-weight:600}
+    .lang-btn:focus{outline:3px solid var(--ring);outline-offset:3px}
+    .lang-code{font-variant:all-small-caps;letter-spacing:.03em}
+    .fixed-corner{position:fixed;top:8px;right:8px;z-index:60;background:rgba(17,24,39,.72);border:1px solid rgba(255,255,255,.18);backdrop-filter:saturate(120%) blur(6px)}
 
     footer{padding-block:var(--s-5);border-top:1px solid rgba(255,255,255,.08);color:var(--fg-dim);text-align:center}
   </style>
@@ -46,14 +48,12 @@
   <header>
     <div class="container wrap">
       <div class="brand">
-        <a href="index.html"><div class="logo">★</div><span>Quatre en ligne</span></a>
+        <a href="index.html"><div class="logo">★</div><span id="brand">Quatre en ligne</span></a>
       </div>
-      <div class="lang" aria-label="Language">
-        <div class="seg" role="tablist" aria-label="Language switcher">
-          <button id="btn-fr" role="tab" aria-selected="true" aria-current="true">FR</button>
-          <button id="btn-en" role="tab" aria-selected="false">EN</button>
-        </div>
-      </div>
+      <button id="langBtn" class="lang-btn fixed-corner" aria-label="Changer la langue" title="Changer la langue">
+        <span aria-hidden="true">🌐</span>
+        <span class="lang-code" id="langCode">EN</span>
+      </button>
     </div>
   </header>
 
@@ -62,7 +62,7 @@
     <article id="fr" class="card panel flow" lang="fr">
       <header class="flow" style="--flow:12px">
         <h1>Politique de confidentialité</h1>
-        <p class="muted">Dernière mise à jour&nbsp;: 28 août 2025</p>
+        <p class="muted">Dernière mise à jour : 28 août 2025</p>
       </header>
 
       <section class="flow">
@@ -72,23 +72,23 @@
       <section class="flow">
         <h2>Données traitées</h2>
         <ul>
-          <li><strong>Données liées à la publicité (par Google)</strong> : identifiants publicitaires (IDFA/AAID), infos appareil, localisation approximative, interactions avec les annonces, pour la diffusion et la mesure.</li>
-          <li><strong>Aucune collecte par le développeur</strong> : pas de compte, pas d’analytics maison, pas de serveur recevant vos données personnelles.</li>
+          <li><strong>Données liées à la publicité (par Google)</strong> : identifiants publicitaires (IDFA/AAID), infos appareil, localisation approximative, interactions avec les annonces, pour la diffusion et la mesure.</li>
+          <li><strong>Aucune collecte par le développeur</strong> : pas de compte, pas d’analytics maison, pas de serveur recevant vos données personnelles.</li>
         </ul>
-        <p class="muted">En savoir plus&nbsp;: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">policies.google.com/technologies/ads</a>.</p>
+        <p class="muted">En savoir plus : <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">policies.google.com/technologies/ads</a>.</p>
       </section>
 
       <section class="flow">
         <h2>Vos choix</h2>
         <ul>
-          <li><strong>Publicités personnalisées</strong> : activez/désactivez la personnalisation dans les réglages de l’appareil ou les paramètres d’annonces Google.</li>
-          <li><strong>Identifiant publicitaire</strong> : vous pouvez le réinitialiser dans les réglages de l’appareil.</li>
+          <li><strong>Publicités personnalisées</strong> : activez/désactivez la personnalisation dans les réglages de l’appareil ou les paramètres d’annonces Google.</li>
+          <li><strong>Identifiant publicitaire</strong> : vous pouvez le réinitialiser dans les réglages de l’appareil.</li>
         </ul>
       </section>
 
       <section class="flow">
         <h2>Transferts & tiers</h2>
-        <p>Les partenaires publicitaires (ex.&nbsp;: Google) peuvent traiter des données sur des serveurs situés dans différents pays. Le développeur ne reçoit pas ces données.</p>
+        <p>Les partenaires publicitaires (ex. : Google) peuvent traiter des données sur des serveurs situés dans différents pays. Le développeur ne reçoit pas ces données.</p>
       </section>
 
       <section class="flow">
@@ -98,7 +98,7 @@
 
       <section class="flow">
         <h2>Contact</h2>
-        <p>Questions&nbsp;? <a href="mailto:bobcats_triton.0k@icloud.com">bobcats_triton.0k@icloud.com</a></p>
+        <p>Questions ? <a href="mailto:bobcats_triton.0k@icloud.com">bobcats_triton.0k@icloud.com</a></p>
       </section>
     </article>
 
@@ -110,7 +110,7 @@
       </header>
 
       <section class="flow">
-        <p><strong>Quatre en ligne</strong> includes ads. Google’s ad networks may collect certain information to serve and measure ads. <strong>The developer does not collect, store, or sell any additional personal data</strong> beyond what is processed by advertising partners.</p>
+        <p><strong>Four in a row</strong> includes ads. Google’s ad networks may collect certain information to serve and measure ads. <strong>The developer does not collect, store, or sell any additional personal data</strong> beyond what is processed by advertising partners.</p>
       </section>
 
       <section class="flow">
@@ -148,36 +148,116 @@
   </main>
 
   <footer class="container">
-    <small>© <span id="year"></span> Quatre en ligne • <a href="index.html">Accueil</a></small>
+    <small>© <span id="year"></span> <span id="brand-footer">Quatre en ligne</span> • <a id="home-link" href="index.html">Accueil</a></small>
   </footer>
 
   <script>
-    // year
+    // i18n basic strings for head + chrome
+    const I18N = {
+      fr: {
+        brand: 'Quatre en ligne',
+        title: 'Politique de confidentialité – Quatre en ligne',
+        desc: "Politique de confidentialité de l’app Quatre en ligne (FR/EN).",
+        home: 'Accueil',
+        switchLabel: 'Changer la langue en anglais'
+      },
+      en: {
+        brand: 'Four in a row',
+        title: 'Privacy Policy – Four in a row',
+        desc: 'Privacy Policy for the Four in a row app (FR/EN).',
+        home: 'Home',
+        switchLabel: 'Switch language to French'
+      }
+    };
+
+    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // language toggle (simple)
+    // Language helpers
+    const getSystemLang = () => {
+      const prefs = navigator.languages || [navigator.language];
+      for (const l of prefs) {
+        const code = (l||'').toLowerCase();
+        if (code.startsWith('fr')) return 'fr';
+        if (code.startsWith('en')) return 'en';
+      }
+      return 'fr';
+    };
+    const readStoredLang = () => { try { return localStorage.getItem('lang'); } catch { return null; } };
+
     const fr = document.getElementById('fr');
     const en = document.getElementById('en');
-    const btnFr = document.getElementById('btn-fr');
-    const btnEn = document.getElementById('btn-en');
+    const brand = document.getElementById('brand');
+    const brandFooter = document.getElementById('brand-footer');
+    const homeLink = document.getElementById('home-link');
+    const langBtn = document.getElementById('langBtn');
 
-    function setLang(lang){
+    let currentLang = readStoredLang() || getSystemLang();
+
+    function applyLang(lang){
       const isFr = lang === 'fr';
-      fr.hidden = !isFr; en.hidden = isFr;
-      document.documentElement.lang = lang;
-      btnFr.setAttribute('aria-current', isFr ? 'true' : 'false');
-      btnFr.setAttribute('aria-selected', String(isFr));
-      btnEn.setAttribute('aria-current', !isFr ? 'true' : 'false');
-      btnEn.setAttribute('aria-selected', String(!isFr));
-      try{ localStorage.setItem('ql_lang', lang); }catch(e){}
+      currentLang = isFr ? 'fr' : 'en';
+      try { localStorage.setItem('lang', currentLang); } catch {}
+
+      // html lang
+      document.documentElement.lang = currentLang;
+
+      // head/meta + chrome texts
+      const t = I18N[currentLang];
+      document.getElementById('meta-title').textContent = t.title;
+      document.getElementById('meta-desc').setAttribute('content', t.desc);
+      brand.textContent = t.brand;
+      brandFooter.textContent = t.brand;
+      homeLink.textContent = t.home;
+
+      // show/hide sections
+      fr.hidden = !isFr;
+      en.hidden = isFr;
+
+      // language toggle button (shows the next code)
+      document.getElementById('langCode').textContent = isFr ? 'EN' : 'FR';
+      langBtn.setAttribute('aria-label', t.switchLabel);
+      langBtn.setAttribute('title', t.switchLabel);
     }
 
-    btnFr.addEventListener('click', ()=> setLang('fr'));
-    btnEn.addEventListener('click', ()=> setLang('en'));
+    langBtn.addEventListener('click', () => applyLang(currentLang === 'fr' ? 'en' : 'fr'));
 
-    const saved = (()=>{ try{return localStorage.getItem('ql_lang')}catch(e){return null} })();
-    const navLang = (navigator.language || 'fr').toLowerCase().startsWith('en') ? 'en' : 'fr';
-    setLang(saved || navLang);
+    // init
+    applyLang(currentLang);
+
+    // --- Minimal runtime tests (query ?tests=true or #tests) ---
+    function runTests(){
+      const orig = currentLang;
+      console.group('[privacy i18n tests]');
+      try{
+        console.assert(I18N.fr.brand === 'Quatre en ligne', 'FR brand ok');
+        console.assert(I18N.en.brand === 'Four in a row', 'EN brand ok');
+
+        applyLang('en');
+        console.assert(document.documentElement.lang === 'en', 'html lang en');
+        console.assert(brand.textContent === 'Four in a row', 'header brand en');
+        console.assert(brandFooter.textContent === 'Four in a row', 'footer brand en');
+        console.assert(document.getElementById('meta-title').textContent.includes('Privacy Policy'), 'title en');
+        console.assert(en.hidden === false && fr.hidden === true, 'section visibility en');
+
+        applyLang('fr');
+        console.assert(document.documentElement.lang === 'fr', 'html lang fr');
+        console.assert(brand.textContent === 'Quatre en ligne', 'header brand fr');
+        console.assert(brandFooter.textContent === 'Quatre en ligne', 'footer brand fr');
+        console.assert(document.getElementById('meta-title').textContent.includes('Politique'), 'title fr');
+        console.assert(fr.hidden === false && en.hidden === true, 'section visibility fr');
+
+        console.log('All tests passed ✅');
+      } catch (e){
+        console.error('Tests failed:', e);
+      } finally {
+        applyLang(orig);
+        console.groupEnd();
+      }
+    }
+    if (location.search.includes('tests=true') || location.hash.includes('tests')){
+      (window.requestIdleCallback || window.requestAnimationFrame)(runTests);
+    }
   </script>
 </body>
 </html>
